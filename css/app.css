@@ -279,28 +279,50 @@ body {
 }
 
 .nav-arrow {
-  align-self: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  border: 1px solid #3b4856;
-  border-radius: 999px;
-  background: #202a35;
-  color: var(--ink);
-  font-size: 1.45rem;
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid #738295;
+  border-radius: 10px;
+  background: rgba(17, 24, 32, 0.96);
+  color: #f2f5f7;
+  font-size: 2rem;
+  font-weight: 600;
   line-height: 1;
   cursor: pointer;
   padding: 0;
+  transform: translateY(-50%);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.nav-arrow-left {
+  left: 3.25rem;
+}
+
+.nav-arrow-right {
+  right: 3.25rem;
 }
 
 .nav-arrow:hover:not(:disabled) {
   border-color: var(--accent);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.nav-arrow:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 select:focus, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .nav-arrow:disabled {
-  opacity: 0.35;
+  opacity: 0.55;
   cursor: default;
 }
 
