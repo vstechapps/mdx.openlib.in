@@ -67,13 +67,18 @@
         <div class="pane-head">
           <h2>MD Preview</h2>
           <div id="ppt-controls" class="ppt-controls is-hidden">
-            <button type="button" id="prev-slide" class="btn btn-tiny">Prev</button>
             <span id="slide-pos">1 / 1</span>
-            <button type="button" id="next-slide" class="btn btn-tiny">Next</button>
+            <button type="button" id="present-btn" class="btn btn-tiny">Full Screen Presentation</button>
           </div>
         </div>
-        <div id="preview-frame" class="preview-frame theme-classic">
-          <div id="preview" class="preview-body md-classic"></div>
+        <div id="preview-stage" class="preview-stage">
+          <button type="button" id="exit-present" class="btn present-exit is-hidden">Exit</button>
+          <button type="button" id="prev-slide" class="nav-arrow nav-arrow-left is-hidden" aria-label="Previous slide">‹</button>
+          <div id="preview-frame" class="preview-frame theme-classic">
+            <div id="preview" class="preview-body md-classic"></div>
+          </div>
+          <button type="button" id="next-slide" class="nav-arrow nav-arrow-right is-hidden" aria-label="Next slide">›</button>
+          <span id="present-pos" class="present-pos is-hidden">1 / 1</span>
         </div>
       </section>
     </main>

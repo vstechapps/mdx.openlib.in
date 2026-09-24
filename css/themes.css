@@ -196,4 +196,10 @@
     min-height: 100vh;
     padding: 18mm 16mm;
   }
+
+  body.is-presenting .nav-arrow,
+  body.is-presenting .present-exit,
+  body.is-presenting .present-pos {
+    display: none !important;
+  }
 }

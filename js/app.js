@@ -46,6 +46,9 @@ console.log("Hello MDX");
     prevSlide: document.getElementById("prev-slide"),
     nextSlide: document.getElementById("next-slide"),
     slidePos: document.getElementById("slide-pos"),
+    presentBtn: document.getElementById("present-btn"),
+    exitPresent: document.getElementById("exit-present"),
+    presentPos: document.getElementById("present-pos"),
     tabs: Array.from(document.querySelectorAll(".mode-tab")),
   };
 
@@ -53,6 +56,7 @@ console.log("Hello MDX");
     mode: "pdf",
     theme: "classic",
     slideIndex: 0,
+    presenting: false,
     folderHint: "",
   };
 
@@ -66,6 +70,7 @@ console.log("Hello MDX");
 
   function applyTheme() {
     els.previewFrame.className = `preview-frame theme-${state.theme}`;
+    document.getElementById("preview-stage").className = `preview-stage theme-${state.theme}`;
     const pptClass = state.mode === "ppt" ? " ppt-mode" : "";
     els.preview.className = `preview-body md-${state.theme}${pptClass}`;
   }
@@ -74,26 +79,52 @@ console.log("Hello MDX");
     return Array.from(els.preview.querySelectorAll(".slide"));
   }
 
+  function updateSlideChrome(count) {
+    const label = count ? `${state.slideIndex + 1} / ${count}` : "0 / 0";
+    els.slidePos.textContent = label;
+    els.presentPos.textContent = label;
+    els.prevSlide.disabled = !count || state.slideIndex <= 0;
+    els.nextSlide.disabled = !count || state.slideIndex >= count - 1;
+  }
+
   function showSlide(index) {
     const items = slides();
     if (!items.length) {
-      els.slidePos.textContent = "0 / 0";
+      updateSlideChrome(0);
       return;
     }
     state.slideIndex = Math.max(0, Math.min(index, items.length - 1));
     items.forEach((slide, i) => slide.classList.toggle("is-active", i === state.slideIndex));
-    els.slidePos.textContent = `${state.slideIndex + 1} / ${items.length}`;
+    updateSlideChrome(items.length);
+  }
+
+  function setPresenting(on) {
+    state.presenting = Boolean(on) && state.mode === "ppt";
+    document.body.classList.toggle("is-presenting", state.presenting);
+    els.exitPresent.classList.toggle("is-hidden", !state.presenting);
+    els.presentPos.classList.toggle("is-hidden", !state.presenting);
+    if (state.presenting) {
+      const root = document.documentElement;
+      if (root.requestFullscreen) root.requestFullscreen().catch(() => {});
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
   }
 
   function render() {
     applyTheme();
     els.preview.innerHTML = window.MDXMarkdown.renderPreview(els.mdInput.value, state.mode);
-    els.pptControls.classList.toggle("is-hidden", state.mode !== "ppt");
-    els.exportScopeWrap.classList.toggle("is-hidden", state.mode !== "ppt");
-    if (state.mode === "ppt") showSlide(state.slideIndex);
+    const ppt = state.mode === "ppt";
+    els.pptControls.classList.toggle("is-hidden", !ppt);
+    els.exportScopeWrap.classList.toggle("is-hidden", !ppt);
+    els.prevSlide.classList.toggle("is-hidden", !ppt);
+    els.nextSlide.classList.toggle("is-hidden", !ppt);
+    if (ppt) showSlide(state.slideIndex);
+    else setPresenting(false);
   }
 
   function setMode(mode) {
+    if (mode !== "ppt") setPresenting(false);
     state.mode = mode;
     els.tabs.forEach((tab) => {
       const active = tab.dataset.mode === mode;
@@ -164,10 +195,20 @@ console.log("Hello MDX");
 
   els.prevSlide.addEventListener("click", () => showSlide(state.slideIndex - 1));
   els.nextSlide.addEventListener("click", () => showSlide(state.slideIndex + 1));
+  els.presentBtn.addEventListener("click", () => setPresenting(true));
+  els.exitPresent.addEventListener("click", () => setPresenting(false));
+
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement && state.presenting) setPresenting(false);
+  });
 
   document.addEventListener("keydown", (event) => {
     if (state.mode !== "ppt") return;
-    if (event.target === els.mdInput) return;
+    if (event.key === "Escape" && state.presenting) {
+      setPresenting(false);
+      return;
+    }
+    if (event.target === els.mdInput && !state.presenting) return;
     if (event.key === "ArrowLeft") showSlide(state.slideIndex - 1);
     if (event.key === "ArrowRight") showSlide(state.slideIndex + 1);
   });
