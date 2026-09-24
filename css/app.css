@@ -20,7 +20,7 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font);
@@ -39,7 +39,8 @@ body::before {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .navbar {
@@ -186,10 +187,12 @@ body {
 .workspace {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr);
   gap: 1rem;
   padding: 1rem 1.5rem 1.4rem;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
 }
 
 .pane {
@@ -197,6 +200,7 @@ body {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .pane-head {
@@ -231,7 +235,8 @@ body {
 #md-input {
   flex: 1;
   width: 100%;
-  min-height: 24rem;
+  min-height: 0;
+  overflow: auto;
   resize: none;
   border: 1px solid var(--line);
   background: #10161d;
@@ -256,11 +261,14 @@ body {
   grid-template-columns: 2.4rem 1fr 2.4rem;
   align-items: stretch;
   gap: 0.35rem;
-  min-height: 24rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .preview-frame {
-  min-height: 24rem;
+  grid-column: 2;
+  min-height: 0;
+  height: 100%;
   border: 1px solid var(--line);
   background: var(--pane);
   margin: 0;
@@ -369,8 +377,7 @@ body.is-presenting .preview-stage {
   .toolbar { padding: 0.8rem 1rem; }
   .toolbar-file { width: 100%; }
   .toolbar-export { margin-left: 0; }
-  .workspace { grid-template-columns: 1fr; padding: 0.9rem 1rem 1rem; }
-  #md-input, .preview-stage, .preview-frame { min-height: 20rem; }
+  .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); padding: 0.9rem 1rem 1rem; }
 }
 
 body.is-presenting .preview-stage {
@@ -426,6 +433,7 @@ body.is-presenting .slide.is-active {
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .navbar {

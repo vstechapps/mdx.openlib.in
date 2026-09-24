@@ -1,100 +1,101 @@
-.md-classic {
-  font-family: Georgia, "Times New Roman", serif;
-  color: #1d1a16;
-  font-size: 1.02rem;
-  line-height: 1.65;
+.md-classic,
+.md-executive,
+.md-warm,
+.md-dark {
+  --theme-ink: #25221e;
+  --theme-muted: #6c665d;
+  --theme-heading: #171411;
+  --theme-accent: #bd6b35;
+  --theme-accent-soft: #f3e2d4;
+  --theme-surface: #fffdf8;
+  --theme-code: #f1ece4;
+  --theme-border: #d8cfc3;
+  color: var(--theme-ink);
+  font-size: 1rem;
+  line-height: 1.68;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-.md-classic h1,
-.md-classic h2,
-.md-classic h3 {
-  font-weight: 650;
-  line-height: 1.25;
-  color: #141210;
+.md-classic {
+  font-family: Georgia, "Times New Roman", serif;
+  --theme-accent: #a9572c;
+  --theme-accent-soft: #f1dfd2;
+  --theme-surface: #fffdf8;
+  --theme-code: #f3eee7;
+  --theme-border: #d8cfc3;
 }
 
 .md-executive {
   font-family: "Segoe UI", "Helvetica Neue", sans-serif;
-  color: #243044;
-  font-size: 0.98rem;
-  line-height: 1.6;
+  --theme-ink: #263447;
+  --theme-muted: #66758a;
+  --theme-heading: #142c4c;
+  --theme-accent: #267d88;
+  --theme-accent-soft: #dceff0;
+  --theme-surface: #f5f8fa;
+  --theme-code: #e8eef2;
+  --theme-border: #c9d5df;
+}
+
+.md-warm {
+  font-family: Georgia, "Times New Roman", serif;
+  --theme-ink: #4b3428;
+  --theme-muted: #806453;
+  --theme-heading: #71351f;
+  --theme-accent: #c26a32;
+  --theme-accent-soft: #f5dfc9;
+  --theme-surface: #fff4e4;
+  --theme-code: #f5e3cd;
+  --theme-border: #dfc4a8;
+}
+
+.md-dark {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  --theme-ink: #e6e9ed;
+  --theme-muted: #a4afbc;
+  --theme-heading: #ffffff;
+  --theme-accent: #f2a65a;
+  --theme-accent-soft: #3a2e25;
+  --theme-surface: #171d25;
+  --theme-code: #0e141b;
+  --theme-border: #3b4653;
+}
+
+.theme-classic { background: #fffdf8; }
+.theme-executive { background: #f5f8fa; }
+.theme-warm { background: #fff4e4; }
+.theme-dark { background: #171d25; }
+
+.md-classic h1,
+.md-executive h1,
+.md-warm h1,
+.md-dark h1 {
+  border-bottom: 2px solid var(--theme-accent);
+  padding-bottom: 0.45rem;
 }
 
 .md-executive h1,
 .md-executive h2,
 .md-executive h3 {
-  color: #13233f;
-  letter-spacing: -0.02em;
-}
-
-.md-executive h1 {
-  border-bottom: 2px solid #13233f;
-  padding-bottom: 0.28rem;
-}
-
-.md-warm {
-  font-family: Georgia, serif;
-  color: #4a3224;
-  font-size: 1.02rem;
-  line-height: 1.68;
-}
-
-.md-warm h1,
-.md-warm h2,
-.md-warm h3 {
-  color: #7a3b1a;
-}
-
-.theme-classic {
-  background: #fffdf8;
-}
-
-.theme-executive {
-  background: #f4f6f9;
-}
-
-.theme-warm {
-  background: #f6ead7;
-}
-
-.theme-dark {
-  background: #171b22;
-}
-
-.md-dark {
-  font-family: "Segoe UI", sans-serif;
-  color: #e6e2d8;
-  font-size: 0.98rem;
-  line-height: 1.6;
-}
-
-.md-dark h1,
-.md-dark h2,
-.md-dark h3 {
-  color: #f3efe6;
-}
-
-.md-dark a {
-  color: #e7b07a;
-}
-
-.md-dark code,
-.md-dark pre {
-  background: #10141b;
-  color: #f0ebe3;
+  letter-spacing: 0.01em;
 }
 
 .preview-body h1 {
-  font-size: 1.85rem;
+  color: var(--theme-heading);
+  font-size: 2rem;
+  letter-spacing: -0.025em;
   margin: 0 0 0.7rem;
 }
 
 .preview-body h2 {
+  color: var(--theme-heading);
   font-size: 1.35rem;
   margin: 1.3rem 0 0.55rem;
 }
 
 .preview-body h3 {
+  color: var(--theme-heading);
   font-size: 1.12rem;
   margin: 1.1rem 0 0.4rem;
 }
@@ -105,6 +106,10 @@
 .preview-body blockquote {
   margin: 0 0 0.85rem;
 }
+
+.preview-body a { color: var(--theme-accent); font-weight: 650; }
+.preview-body hr { border: 0; border-top: 1px solid var(--theme-border); margin: 1.5rem 0; }
+.preview-body li::marker { color: var(--theme-accent); }
 
 .preview-body img {
   max-width: 100%;
@@ -117,7 +122,8 @@
   overflow: auto;
   padding: 0.75rem 0.85rem;
   border-radius: 4px;
-  background: rgba(20, 18, 16, 0.06);
+  background: var(--theme-code);
+  border: 1px solid var(--theme-border);
   font-size: 0.86rem;
 }
 
@@ -127,7 +133,9 @@
 }
 
 .preview-body :not(pre) > code {
-  background: rgba(20, 18, 16, 0.08);
+  background: var(--theme-code);
+  color: var(--theme-heading);
+  border: 1px solid var(--theme-border);
   padding: 0.08em 0.32em;
 }
 
@@ -140,41 +148,116 @@
 
 .preview-body th,
 .preview-body td {
-  border: 1px solid #cfc6b8;
+  border: 1px solid var(--theme-border);
   padding: 0.35rem 0.5rem;
   text-align: left;
 }
 
-.md-dark th,
-.md-dark td {
-  border-color: #3a4250;
-}
+.preview-body th { background: var(--theme-accent-soft); color: var(--theme-heading); }
 
 .preview-body blockquote {
-  border-left: 3px solid currentColor;
+  border-left: 4px solid var(--theme-accent);
+  background: var(--theme-accent-soft);
   padding-left: 0.75rem;
   opacity: 0.9;
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
   body * {
     visibility: hidden;
   }
 
-  #preview-frame,
-  #preview-frame * {
+  body.export-pdf #preview-frame,
+  body.export-pdf #preview-frame *,
+  body.export-ppt #preview-frame,
+  body.export-ppt #preview-frame * {
     visibility: visible;
   }
 
-  #preview-frame {
-    position: absolute;
-    inset: 0;
+  body.export-pdf .navbar,
+  body.export-pdf .toolbar,
+  body.export-pdf .pane-editor,
+  body.export-pdf .pane-head,
+  body.export-pdf .nav-arrow,
+  body.export-pdf .present-exit,
+  body.export-pdf .present-pos {
+    display: none !important;
+  }
+
+  body.export-pdf .workspace,
+  body.export-pdf .pane-preview,
+  body.export-pdf .preview-stage {
+    display: block;
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+
+  body.export-pdf #preview-frame {
+    position: static;
+    width: auto;
+    min-height: 0;
     border: 0;
     margin: 0;
-    padding: 12mm;
-    overflow: visible;
+    padding: 0;
+    overflow: visible !important;
     box-shadow: none;
     background: #fff;
+  }
+
+  body.export-pdf #preview-frame,
+  body.export-ppt #preview-frame,
+  body.export-pdf #preview-frame *,
+  body.export-ppt #preview-frame * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.export-pdf #preview-frame.theme-classic,
+  body.export-ppt #preview-frame.theme-classic {
+    background: #fffdf8 !important;
+  }
+
+  body.export-pdf #preview-frame.theme-executive,
+  body.export-ppt #preview-frame.theme-executive {
+    background: #f5f8fa !important;
+  }
+
+  body.export-pdf #preview-frame.theme-warm,
+  body.export-ppt #preview-frame.theme-warm {
+    background: #fff4e4 !important;
+  }
+
+  body.export-pdf #preview-frame.theme-dark,
+  body.export-ppt #preview-frame.theme-dark {
+    background: #171d25 !important;
+  }
+
+  body.export-pdf .preview-body {
+    min-height: 0;
+  }
+
+  body.export-pdf .preview-body img {
+    max-height: 230mm;
+    object-fit: contain;
+  }
+
+  body.export-pdf .preview-body pre,
+  body.export-pdf .preview-body table,
+  body.export-pdf .preview-body blockquote {
+    break-inside: avoid;
   }
 
   .slide {
@@ -195,6 +278,7 @@
   body.export-ppt .slide {
     min-height: 100vh;
     padding: 18mm 16mm;
+    background: inherit;
   }
 
   body.is-presenting .nav-arrow,
