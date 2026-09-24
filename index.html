@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MDX — MarkDownExtended</title>
+    <title>MDX | MarkDownExtended</title>
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/themes.css" />
   </head>
@@ -24,41 +24,52 @@
     </header>
 
     <section class="toolbar" aria-label="Document options">
-      <label class="file-pick">
-        <span class="file-pick-label">Markdown file</span>
-        <input id="md-file" type="file" accept=".md,.markdown,.txt,text/markdown" />
-      </label>
+      <div class="toolbar-group toolbar-file">
+        <span class="toolbar-label">Source document</span>
+        <label class="file-pick">
+          <span class="file-pick-label">Choose .md file</span>
+          <input id="md-file" type="file" accept=".md,.markdown,.txt,text/markdown" />
+        </label>
+      </div>
 
-      <button type="button" id="upload-file" class="btn">Upload File</button>
-      <button type="button" id="upload-folder" class="btn">Upload Folder</button>
+      <div class="toolbar-group toolbar-actions">
+        <span class="toolbar-label">Import</span>
+        <div class="action-row">
+          <button type="button" id="upload-file" class="btn">Upload File</button>
+          <button type="button" id="upload-folder" class="btn">Upload Folder</button>
+        </div>
+      </div>
       <input id="folder-input" type="file" webkitdirectory directory multiple hidden />
 
-      <label class="theme-pick">
-        <span>Theme</span>
-        <select id="theme-select">
-          <option value="classic" selected>Classic</option>
-          <option value="executive">Executive</option>
-          <option value="warm">Warm</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
+      <div class="toolbar-group toolbar-theme">
+        <label class="theme-pick">
+          <span class="toolbar-label">Preview theme</span>
+          <select id="theme-select">
+            <option value="classic" selected>Classic</option>
+            <option value="executive">Executive</option>
+            <option value="warm">Warm</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+      </div>
 
-      <label class="export-scope is-hidden" id="export-scope-wrap">
-        <span>Export</span>
-        <select id="export-scope">
-          <option value="all">All slides</option>
-          <option value="current">Current page</option>
-        </select>
-      </label>
-
-      <button type="button" id="export-btn" class="btn btn-accent">Export</button>
+      <div class="toolbar-group toolbar-export">
+        <label class="export-scope is-hidden" id="export-scope-wrap">
+          <span class="toolbar-label">Deck range</span>
+          <select id="export-scope">
+            <option value="all">All slides</option>
+            <option value="current">Current page</option>
+          </select>
+        </label>
+        <button type="button" id="export-btn" class="btn btn-accent">Export</button>
+      </div>
     </section>
 
     <main class="workspace">
       <section class="pane pane-editor">
         <div class="pane-head">
           <h2>MD Content</h2>
-          <span id="file-status" class="status">No file loaded</span>
+          <span id="file-status" class="status"><span class="status-dot"></span>No file loaded</span>
         </div>
         <textarea id="md-input" spellcheck="false" placeholder="Write or upload Markdown…"></textarea>
       </section>
