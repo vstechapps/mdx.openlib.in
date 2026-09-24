@@ -1,0 +1,265 @@
+:root {
+  --nav: #1b2433;
+  --nav-ink: #f4efe6;
+  --accent: #d06a3a;
+  --accent-ink: #fff;
+  --line: #d7d0c4;
+  --paper: #f7f3ea;
+  --ink: #1c1915;
+  --muted: #6b645a;
+  --pane: #fffdf8;
+  --shadow: 0 1px 0 rgba(28, 25, 21, 0.06);
+  --font: "Segoe UI", "Candara", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem;
+  background: var(--nav);
+  color: var(--nav-ink);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.brand-mark {
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.brand-sub {
+  font-size: 0.82rem;
+  opacity: 0.78;
+  letter-spacing: 0.04em;
+}
+
+.mode-tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mode-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  padding: 0.38rem 0.8rem;
+}
+
+.mode-tab.is-active {
+  border-color: rgba(244, 239, 230, 0.35);
+  background: rgba(244, 239, 230, 0.08);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.65rem 0.75rem;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  background: #efe8db;
+}
+
+.file-pick,
+.theme-pick,
+.export-scope {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.file-pick input,
+.theme-pick select,
+.export-scope select {
+  font: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 0.38rem 0.5rem;
+  min-height: 2.1rem;
+}
+
+.file-pick input {
+  max-width: 16rem;
+}
+
+.btn {
+  font: inherit;
+  font-size: 0.86rem;
+  border: 1px solid #b9b09f;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.42rem 0.8rem;
+  min-height: 2.1rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: #8f8678;
+}
+
+.btn-accent {
+  background: var(--accent);
+  border-color: #b4532b;
+  color: var(--accent-ink);
+}
+
+.btn-accent:hover {
+  filter: brightness(1.05);
+}
+
+.btn-tiny {
+  min-height: 1.7rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  padding: 0.9rem 1.1rem 1.1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.pane-head h2 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.status {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+}
+
+#md-input {
+  flex: 1;
+  width: 100%;
+  min-height: 24rem;
+  resize: none;
+  border: 1px solid var(--line);
+  background: var(--pane);
+  color: var(--ink);
+  padding: 0.9rem 1rem;
+  font: 0.92rem/1.5 ui-monospace, "Cascadia Code", Consolas, monospace;
+  box-shadow: var(--shadow);
+}
+
+.preview-frame {
+  flex: 1;
+  min-height: 24rem;
+  border: 1px solid var(--line);
+  background: var(--pane);
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow: auto;
+  box-shadow: var(--shadow);
+}
+
+.preview-body {
+  min-height: 100%;
+}
+
+.preview-body.ppt-mode {
+  min-height: 100%;
+  display: flex;
+}
+
+.slide {
+  display: none;
+  width: 100%;
+  min-height: 18rem;
+  padding: 0.35rem 0.2rem 1rem;
+}
+
+.slide.is-active {
+  display: block;
+}
+
+.ppt-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mode-tabs {
+    justify-content: flex-end;
+  }
+}

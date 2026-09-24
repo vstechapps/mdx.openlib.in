@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MDX — MarkDownExtended</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/themes.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="brand">
+        <span class="brand-mark">MDX</span>
+        <span class="brand-sub">MarkDownExtended</span>
+      </div>
+      <nav class="mode-tabs" role="tablist" aria-label="Output mode">
+        <button type="button" class="mode-tab is-active" data-mode="pdf" role="tab" aria-selected="true">
+          MD2PDF
+        </button>
+        <button type="button" class="mode-tab" data-mode="ppt" role="tab" aria-selected="false">
+          MD2PPT
+        </button>
+      </nav>
+    </header>
+
+    <section class="toolbar" aria-label="Document options">
+      <label class="file-pick">
+        <span class="file-pick-label">Markdown file</span>
+        <input id="md-file" type="file" accept=".md,.markdown,.txt,text/markdown" />
+      </label>
+
+      <button type="button" id="upload-file" class="btn">Upload File</button>
+      <button type="button" id="upload-folder" class="btn">Upload Folder</button>
+      <input id="folder-input" type="file" webkitdirectory directory multiple hidden />
+
+      <label class="theme-pick">
+        <span>Theme</span>
+        <select id="theme-select">
+          <option value="classic" selected>Classic</option>
+          <option value="executive">Executive</option>
+          <option value="warm">Warm</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+
+      <label class="export-scope is-hidden" id="export-scope-wrap">
+        <span>Export</span>
+        <select id="export-scope">
+          <option value="all">All slides</option>
+          <option value="current">Current page</option>
+        </select>
+      </label>
+
+      <button type="button" id="export-btn" class="btn btn-accent">Export</button>
+    </section>
+
+    <main class="workspace">
+      <section class="pane pane-editor">
+        <div class="pane-head">
+          <h2>MD Content</h2>
+          <span id="file-status" class="status">No file loaded</span>
+        </div>
+        <textarea id="md-input" spellcheck="false" placeholder="Write or upload Markdown…"></textarea>
+      </section>
+
+      <section class="pane pane-preview">
+        <div class="pane-head">
+          <h2>MD Preview</h2>
+          <div id="ppt-controls" class="ppt-controls is-hidden">
+            <button type="button" id="prev-slide" class="btn btn-tiny">Prev</button>
+            <span id="slide-pos">1 / 1</span>
+            <button type="button" id="next-slide" class="btn btn-tiny">Next</button>
+          </div>
+        </div>
+        <div id="preview-frame" class="preview-frame theme-classic">
+          <div id="preview" class="preview-body md-classic"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+    <script src="js/markdown.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
