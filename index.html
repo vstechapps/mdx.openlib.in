@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MDX | MarkDownExtended</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Lato:wght@400;700&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/themes.css" />
   </head>
@@ -11,14 +14,19 @@
     <header class="navbar">
       <div class="brand">
         <span class="brand-mark">MDX</span>
-        <span class="brand-sub">MarkDownExtended</span>
+        <span class="brand-copy">
+          <span class="brand-sub">MarkDownExtended</span>
+          <span class="brand-caption">A clearer way to present ideas</span>
+        </span>
       </div>
       <nav class="mode-tabs" role="tablist" aria-label="Output mode">
         <button type="button" class="mode-tab is-active" data-mode="pdf" role="tab" aria-selected="true">
-          MD2PDF
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M5 2.75h6l4 4v10.5H5V2.75Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 2.75v4h4M7.25 11h5.5M7.25 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>MD2PDF</span>
         </button>
         <button type="button" class="mode-tab" data-mode="ppt" role="tab" aria-selected="false">
-          MD2PPT
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="3.25" width="15" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 17h6M10 13.75V17M7 7h6M7 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>MD2PPT</span>
         </button>
       </nav>
     </header>
@@ -27,7 +35,7 @@
       <div class="toolbar-group toolbar-file">
         <span class="toolbar-label">Source document</span>
         <label class="file-pick">
-          <span class="file-pick-label">Choose .md file</span>
+          <span class="file-pick-label">Choose Markdown file</span>
           <input id="md-file" type="file" accept=".md,.markdown,.txt,text/markdown" />
         </label>
       </div>
@@ -35,8 +43,14 @@
       <div class="toolbar-group toolbar-actions">
         <span class="toolbar-label">Import</span>
         <div class="action-row">
-          <button type="button" id="upload-file" class="btn">Upload File</button>
-          <button type="button" id="upload-folder" class="btn">Upload Folder</button>
+          <button type="button" id="upload-file" class="btn">
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M5 2.75h6l4 4v10.5H5V2.75Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 2.75v4h4M10 14V9m0 0-2 2m2-2 2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Upload file</span>
+          </button>
+          <button type="button" id="upload-folder" class="btn">
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M2.75 5.25h5l1.5 1.5h8v8.5a1 1 0 0 1-1 1h-12a1.5 1.5 0 0 1-1.5-1.5v-9.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 13V9m0 0-1.75 1.75M10 9l1.75 1.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Upload folder</span>
+          </button>
         </div>
       </div>
       <input id="folder-input" type="file" webkitdirectory directory multiple hidden />
@@ -53,6 +67,18 @@
         </label>
       </div>
 
+      <div class="toolbar-group toolbar-font">
+        <label class="theme-pick">
+          <span class="toolbar-label">Typeface</span>
+          <select id="font-select" aria-label="Presentation typeface">
+            <option value="dm-sans" selected>DM Sans</option>
+            <option value="manrope">Manrope</option>
+            <option value="lato">Lato</option>
+            <option value="montserrat">Montserrat</option>
+          </select>
+        </label>
+      </div>
+
       <div class="toolbar-group toolbar-export">
         <label class="export-scope is-hidden" id="export-scope-wrap">
           <span class="toolbar-label">Deck range</span>
@@ -61,7 +87,10 @@
             <option value="current">Current page</option>
           </select>
         </label>
-        <button type="button" id="export-btn" class="btn btn-accent">Export</button>
+        <button type="button" id="export-btn" class="btn btn-accent">
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M10 2.75v9m0 0 3.25-3.25M10 11.75 6.75 8.5M3.5 12.5v3.75h13V12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Export</span>
+        </button>
       </div>
     </section>
 
@@ -79,16 +108,22 @@
           <h2>MD Preview</h2>
           <div id="ppt-controls" class="ppt-controls is-hidden">
             <span id="slide-pos">1 / 1</span>
-            <button type="button" id="present-btn" class="btn btn-tiny">Full Screen Presentation</button>
+            <button type="button" id="present-btn" class="btn btn-tiny">
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="3" width="15" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 17h6m-3-3v3M6.5 7h7M6.5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Present</span>
+            </button>
           </div>
         </div>
         <div id="preview-stage" class="preview-stage">
-          <button type="button" id="exit-present" class="btn present-exit is-hidden">Exit</button>
-          <button type="button" id="prev-slide" class="nav-arrow nav-arrow-left is-hidden" aria-label="Previous slide">‹</button>
+          <button type="button" id="exit-present" class="btn present-exit is-hidden" aria-label="Exit presentation" title="Exit presentation">
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M7.5 3.5h-3a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h3M12 6l4 4-4 4m4-4H8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Exit</span>
+          </button>
+          <button type="button" id="prev-slide" class="nav-arrow nav-arrow-left is-hidden" aria-label="Previous slide" title="Previous slide"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div id="preview-frame" class="preview-frame theme-classic">
             <div id="preview" class="preview-body md-classic"></div>
           </div>
-          <button type="button" id="next-slide" class="nav-arrow nav-arrow-right is-hidden" aria-label="Next slide">›</button>
+          <button type="button" id="next-slide" class="nav-arrow nav-arrow-right is-hidden" aria-label="Next slide" title="Next slide"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <span id="present-pos" class="present-pos is-hidden">1 / 1</span>
         </div>
       </section>

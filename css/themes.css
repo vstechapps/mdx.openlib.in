@@ -62,6 +62,11 @@
   --theme-border: #3b4653;
 }
 
+.preview-body.font-dm-sans { font-family: "DM Sans", sans-serif; }
+.preview-body.font-manrope { font-family: "Manrope", sans-serif; }
+.preview-body.font-lato { font-family: "Lato", sans-serif; }
+.preview-body.font-montserrat { font-family: "Montserrat", sans-serif; }
+
 .theme-classic { background: #fffdf8; }
 .theme-executive { background: #f5f8fa; }
 .theme-warm { background: #fff4e4; }

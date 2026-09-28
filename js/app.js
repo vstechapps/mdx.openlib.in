@@ -1,32 +1,39 @@
 (function () {
-  const SAMPLE = `# MDX — MarkDownExtended
+  const SAMPLE = `# Ideas to impact
 
-Turn Markdown into a **PDF** or a **slide deck**.
+### A concise field guide to making complex work easier to understand.
 
-## Quick start
+Great communication turns **good thinking into shared momentum**. Use this sample to explore a clean document layout, then switch to presentation mode to see each chapter as a slide.
 
-1. Choose a \`.md\` file and click **Upload File**.
-2. Click **Upload Folder** so local images can resolve in preview.
-3. Pick a theme, then **Export**.
+> Clarity is not less detail. It is the right detail, in the right order.
 
 ---
 
-# Images
+# Make the important obvious
 
-Reference images from the same folder tree:
+Bring the core message forward. Give each section one job, use specific language, and let supporting detail earn its place.
 
-![demo](images/demo.png)
+- Lead with the decision or insight
+- Group related evidence together
+- Keep every page focused on one idea
+
+### A simple test
+
+Can someone understand the point in **ten seconds** and explain what happens next?
 
 ---
 
-# Lists and code
+# Turn understanding into action
 
-- Classic, Executive, Warm, Dark themes
-- MD2PPT splits on \`---\` (or H1 headings)
+Strong documents help a team move from discussion to clear ownership.
 
-\`\`\`js
-console.log("Hello MDX");
-\`\`\`
+| Moment | Useful outcome |
+| --- | --- |
+| Align | One shared view of the goal |
+| Decide | A clear choice with its rationale |
+| Act | An owner, a next step, and a date |
+
+**The result:** less time translating information, more time doing meaningful work.
 `;
 
   const els = {
@@ -35,6 +42,7 @@ console.log("Hello MDX");
     uploadFolder: document.getElementById("upload-folder"),
     folderInput: document.getElementById("folder-input"),
     themeSelect: document.getElementById("theme-select"),
+    fontSelect: document.getElementById("font-select"),
     exportBtn: document.getElementById("export-btn"),
     exportScopeWrap: document.getElementById("export-scope-wrap"),
     exportScope: document.getElementById("export-scope"),
@@ -55,6 +63,7 @@ console.log("Hello MDX");
   const state = {
     mode: "pdf",
     theme: "classic",
+    font: "dm-sans",
     slideIndex: 0,
     presenting: false,
     folderHint: "",
@@ -72,7 +81,7 @@ console.log("Hello MDX");
     els.previewFrame.className = `preview-frame theme-${state.theme}`;
     document.getElementById("preview-stage").className = `preview-stage theme-${state.theme}`;
     const pptClass = state.mode === "ppt" ? " ppt-mode" : "";
-    els.preview.className = `preview-body md-${state.theme}${pptClass}`;
+    els.preview.className = `preview-body md-${state.theme} font-${state.font}${pptClass}`;
   }
 
   function slides() {
@@ -186,6 +195,11 @@ console.log("Hello MDX");
 
   els.themeSelect.addEventListener("change", () => {
     state.theme = els.themeSelect.value;
+    render();
+  });
+
+  els.fontSelect.addEventListener("change", () => {
+    state.font = els.fontSelect.value;
     render();
   });
 
