@@ -1,6 +1,8 @@
 # mdx.openlib.in
 Mark Down Extender For Presentation and PPT
 
+Getting started guide: [getting-started/index.html](getting-started/index.html).
+
 ## Markdown renderer bundle
 
 `js/markdown.min.js` is a standalone browser bundle containing Marked 15.0.7,
