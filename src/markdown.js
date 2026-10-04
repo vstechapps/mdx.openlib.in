@@ -85,12 +85,17 @@
     return global.DOMPurify.sanitize(html, { ADD_TAGS: ["img"], ADD_ATTR: ["src", "alt", "title"] });
   }
 
-  function renderPreview(markdown, mode) {
-    if (mode !== "ppt") return renderHtml(markdown);
-
-    return splitSlides(markdown)
+  function renderPreview(markdown, mode, theme) {
+    const content = mode !== "ppt"
+      ? renderHtml(markdown)
+      : splitSlides(markdown)
       .map((slide, index) => `<section class="slide${index === 0 ? " is-active" : ""}" data-slide="${index}">${renderHtml(slide)}</section>`)
       .join("");
+
+    if (!["classic", "executive", "warm", "dark"].includes(theme)) return content;
+
+    const pptClass = mode === "ppt" ? " ppt-mode" : "";
+    return `<div class="preview-body md-${theme}${pptClass} theme-${theme}">${content}</div>`;
   }
 
   global.MDXMarkdown = {
