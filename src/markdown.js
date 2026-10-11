@@ -98,10 +98,10 @@
     return `<div class="preview-body md-${theme}${pptClass} theme-${theme}">${content}</div>`;
   }
 
-  global.MDXMarkdown = {
+  global.MDX = Object.assign(global.MDX || {}, {
     registerFolderFiles,
     renderPreview,
     splitSlides,
     imageCount: () => imageUrls.size,
-  };
+  });
 })(window);

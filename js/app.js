@@ -136,7 +136,7 @@ Strong documents help a team move from discussion to clear ownership.
 
   function render() {
     applyTheme();
-    els.preview.innerHTML = window.MDXMarkdown.renderPreview(els.mdInput.value, state.mode);
+    els.preview.innerHTML = window.MDX.renderPreview(els.mdInput.value, state.mode);
     const ppt = state.mode === "ppt";
     els.pptControls.classList.toggle("is-hidden", !ppt);
     els.exportScopeWrap.classList.toggle("is-hidden", !ppt);
@@ -258,7 +258,7 @@ Strong documents help a team move from discussion to clear ownership.
     const files = Array.from(els.folderInput.files || []);
     if (!files.length) return;
 
-    const mapped = window.MDXMarkdown.registerFolderFiles(files);
+    const mapped = window.MDX.registerFolderFiles(files);
     const mdCandidates = files.filter((file) => /\.(md|markdown|txt)$/i.test(file.name));
     const currentName = (els.mdFile.files[0] && els.mdFile.files[0].name) || "";
 
@@ -279,7 +279,7 @@ Strong documents help a team move from discussion to clear ownership.
   });
 
   els.mdInput.addEventListener("input", () => {
-    state.slideIndex = Math.min(state.slideIndex, Math.max(0, window.MDXMarkdown.splitSlides(els.mdInput.value).length - 1));
+    state.slideIndex = Math.min(state.slideIndex, Math.max(0, window.MDX.splitSlides(els.mdInput.value).length - 1));
     render();
   });
 
@@ -326,7 +326,7 @@ Strong documents help a team move from discussion to clear ownership.
   });
 
   els.exportBtn.addEventListener("click", () => {
-    window.MDXExport.exportPreview({
+    window.MDX.exportPreview({
       mode: state.mode,
       scope: state.mode === "ppt" ? els.exportScope.value : "all",
     });

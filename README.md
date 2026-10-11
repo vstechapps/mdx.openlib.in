@@ -3,16 +3,19 @@ Mark Down Extender For Presentation and PPT
 
 Getting started guide: [getting-started/index.html](getting-started/index.html).
 
-## Markdown renderer bundle
+## MDX JS bundle
 
-`js/markdown.min.js` is a standalone browser bundle containing Marked 15.0.7,
-DOMPurify 3.2.5, and the MDXMarkdown renderer. Load it with a script tag; it
-exposes `window.MDXMarkdown`:
+`js/mdx.min.js` is a standalone browser bundle containing Marked 15.0.7,
+DOMPurify 3.2.5, the Markdown renderer, and the preview export helper. Load it
+with a script tag; it exposes `window.MDX`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/OWNER/REPO@VERSION/js/markdown.min.js"></script>
+<script src="https://mdx.openlib.in/js/mdx.min.js" defer></script>
 <script>
-	const html = MDXMarkdown.renderPreview("# Hello", "pdf", "warm");
+	document.addEventListener("DOMContentLoaded", () => {
+		const html = MDX.renderPreview("# Hello", "pdf", "warm");
+		document.querySelector("#preview").innerHTML = html;
+	});
 </script>
 ```
 
@@ -20,11 +23,13 @@ The optional theme is `classic`, `executive`, `warm`, or `dark`. Include
 `css/markdown-preview-themes.css` to apply those theme styles. Include
 `css/mdx-app-ui.css` for the MDX app interface and preview layout. The renderer
 also works without a theme parameter, returning only the rendered content.
+`MDX.exportPreview({ mode: "pdf", scope: "all" })` prints an MDX preview using
+the browser's print dialog.
 
-The editable renderer source is `src/markdown.js`; its pinned dependencies are
-`src/marked.min.js` and `src/purify.min.js`. To regenerate the browser bundle
-after changing a source file, run:
+The editable sources are `src/markdown.js` and `src/export.js`; their pinned
+dependencies are `src/marked.min.js` and `src/purify.min.js`. To regenerate the
+browser bundle after changing a source file, run:
 
 ```sh
-npx --yes terser src/marked.min.js src/purify.min.js src/markdown.js --compress --mangle --output js/markdown.min.js
+npx --yes terser src/marked.min.js src/purify.min.js src/markdown.js src/export.js --compress --mangle --output js/mdx.min.js
 ```

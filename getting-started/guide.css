@@ -74,7 +74,8 @@ a { color: inherit; }
 }
 
 .brand-copy { display: flex; flex-direction: column; gap: 0.16rem; }
-.brand-sub { color: #f2f5f7; font-family: "Space Grotesk", sans-serif; font-size: 0.95rem; font-weight: 600; }
+.brand-sub { color: #f2f5f7; font-family: "Space Grotesk", sans-serif; font-size: 1.04rem; font-weight: 700; line-height: 1; }
+.brand-accent { color: var(--accent); }
 .brand-caption { color: #93a1af; font-size: 0.68rem; font-weight: 500; }
 
 .mode-tabs {

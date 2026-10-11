@@ -17,5 +17,5 @@
 
   window.addEventListener("afterprint", clearExportState);
 
-  global.MDXExport = { exportPreview };
+  global.MDX = Object.assign(global.MDX || {}, { exportPreview });
 })(window);

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Get started with the MDX Markdown renderer using its browser CDN bundle." />
-    <title>Getting Started | MDX Markdown Renderer</title>
+    <meta name="description" content="Use the MDX JS Library to render Markdown as sanitized static HTML in any web page, with optional themes and export support." />
+    <title>MDX JS Library | Getting Started</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Lato:wght@400;700&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -15,7 +15,7 @@
       <a class="brand" href="../index.html" aria-label="MDX home">
         <span class="brand-mark">MDX</span>
         <span class="brand-copy">
-          <span class="brand-sub">MarkDownExtended</span>
+          <span class="brand-sub">Markdown<span class="brand-accent">Extended</span></span>
           <span class="brand-caption">A clearer way to present ideas</span>
         </span>
       </a>
@@ -27,12 +27,13 @@
 
     <div class="layout">
       <aside class="sidebar" aria-label="On this page">
-        <p class="side-label">GETTING STARTED</p>
-        <a href="#install">Include the bundle</a>
+        <p class="side-label">MDX JS LIBRARY</p>
+        <a href="#install">Quick start</a>
         <a href="#render">Render Markdown</a>
-        <a href="#themes">Apply a theme</a>
-        <a href="#slides">Render slides</a>
-        <a href="#api">API reference</a>
+        <a href="#themes">Themes</a>
+        <a href="#slides">Presentation slides</a>
+        <a href="#export">Export</a>
+        <a href="#api">Functions</a>
         <div class="sidebar-note">
           <span class="status-dot"></span>
           <span>Browser-ready<br />No package install</span>
@@ -40,25 +41,27 @@
       </aside>
 
       <main class="content">
-        <div class="eyebrow"><span class="eyebrow-line"></span>MDX / DEVELOPER GUIDE</div>
-        <h1>Markdown in.<br /><span>Beautiful HTML out.</span></h1>
-        <p class="intro">Add the MDX renderer to any browser page with one script. It parses and sanitizes Markdown, with optional themes and slide formatting built in.</p>
+        <div class="eyebrow"><span class="eyebrow-line"></span>MDX / JAVASCRIPT LIBRARY</div>
+        <h1>MDX JS Library</h1>
+        <p class="intro">A browser JavaScript library for turning Markdown into sanitized, static HTML. Add it to any web page, render content with <code>MDX.renderPreview()</code>, and optionally apply themes or presentation-slide formatting.</p>
 
         <section id="install" class="doc-section">
-          <div class="section-heading"><span class="step">01</span><div><h2>Include the bundle</h2><p>The bundle includes Marked, DOMPurify, and the MDX renderer.</p></div></div>
-          <pre><code>&lt;script src="https://mdx.openlib.in/js/markdown.min.js" defer&gt;&lt;/script&gt;</code></pre>
-          <p class="detail">After it loads, the API is available as <code>window.MDXMarkdown</code>. Since the script uses <code>defer</code>, run your setup after <code>DOMContentLoaded</code>, as shown below. No separate Marked or DOMPurify scripts are needed.</p>
+          <div class="section-heading"><span class="step">01</span><div><h2>Quick start</h2><p>Load the standalone bundle, add a target element, and render a Markdown string.</p></div></div>
+          <pre><code>&lt;script src="https://mdx.openlib.in/js/mdx.min.js" defer&gt;&lt;/script&gt;</code></pre>
+          <p class="detail">The single bundle includes Marked, DOMPurify, the Markdown renderer, and the export helper. Once loaded, it exposes <code>window.MDX</code>; no separate dependency or export scripts are needed.</p>
+          <pre><code>document.addEventListener("DOMContentLoaded", () =&gt; {
+  const markdown = "# Hello\n\nRendered with **MDX**.";
+  const html = MDX.renderPreview(markdown);
+  document.querySelector("#preview").innerHTML = html;
+});</code></pre>
+          <pre class="compact"><code>&lt;div id="preview"&gt;&lt;/div&gt;</code></pre>
         </section>
 
         <section id="render" class="doc-section">
-          <div class="section-heading"><span class="step">02</span><div><h2>Render Markdown</h2><p>Pass a Markdown string to <code>renderPreview</code>, then insert the sanitized HTML into your page.</p></div></div>
-          <pre><code>document.addEventListener("DOMContentLoaded", () =&gt; {
-  const markdown = "# Hello\n\nRendered with **MDX**.";
-  const html = MDXMarkdown.renderPreview(markdown);
-  document.querySelector("#preview").innerHTML = html;
-});</code></pre>
-          <p class="detail">Add a target element wherever the rendered content should appear:</p>
-          <pre class="compact"><code>&lt;div id="preview"&gt;&lt;/div&gt;</code></pre>
+          <div class="section-heading"><span class="step">02</span><div><h2>Render static HTML</h2><p><code>renderPreview</code> returns an HTML string you can insert into your page.</p></div></div>
+          <pre><code>const html = MDX.renderPreview(markdown);
+document.querySelector("#preview").innerHTML = html;</code></pre>
+          <p class="detail">The generated HTML is sanitized before it is returned. Your page controls the container layout and typography; load the MDX theme stylesheet if you want the built-in preview themes.</p>
         </section>
 
         <section id="themes" class="doc-section">
@@ -66,7 +69,7 @@
           <pre><code>&lt;link rel="stylesheet"
   href="https://mdx.openlib.in/css/markdown-preview-themes.css"&gt;
 
-const html = MDXMarkdown.renderPreview(markdown, "pdf", "warm");
+const html = MDX.renderPreview(markdown, "pdf", "warm");
 document.querySelector("#preview").innerHTML = html;</code></pre>
           <div class="theme-list" aria-label="Available themes">
             <span class="theme-chip"><i class="swatch classic"></i>classic</span>
@@ -78,20 +81,32 @@ document.querySelector("#preview").innerHTML = html;</code></pre>
         </section>
 
         <section id="slides" class="doc-section">
-          <div class="section-heading"><span class="step">04</span><div><h2>Render slides</h2><p>Use <code>"ppt"</code> mode to split Markdown into slide sections.</p></div></div>
-          <pre><code>const slides = MDXMarkdown.renderPreview(markdown, "ppt", "executive");
+          <div class="section-heading"><span class="step">04</span><div><h2>Render presentation slides</h2><p>Use <code>"ppt"</code> mode to split Markdown into slide sections.</p></div></div>
+          <pre><code>const slides = MDX.renderPreview(markdown, "ppt", "executive");
 document.querySelector("#deck").innerHTML = slides;</code></pre>
           <p class="detail">Separate slides with a line containing <code>---</code>. The result is a sequence of <code>.slide</code> sections; add your own navigation and presentation controls if needed.</p>
         </section>
 
+        <section id="export" class="doc-section">
+          <div class="section-heading"><span class="step">05</span><div><h2>Export the MDX preview</h2><p>The bundle includes an export helper that sends the prepared MDX preview to the browser print dialog.</p></div></div>
+          <pre><code>&lt;script src="https://mdx.openlib.in/js/mdx.min.js" defer&gt;&lt;/script&gt;
+&lt;script&gt;
+document.addEventListener("DOMContentLoaded", () =&gt; {
+  MDX.exportPreview({ mode: "pdf", scope: "all" });
+});
+&lt;/script&gt;</code></pre>
+          <p class="detail">Use this helper with the MDX app's preview markup and print styles. Choose “Save as PDF” in the browser's print dialog. For a custom page layout, use your own print CSS or export workflow.</p>
+        </section>
+
         <section id="api" class="doc-section api-section">
-          <div class="section-heading"><span class="step">05</span><div><h2>API reference</h2><p>Small surface, easy to drop into an existing page.</p></div></div>
+          <div class="section-heading"><span class="step">06</span><div><h2>Functions</h2><p>Core renderer functions and the optional MDX preview export helper.</p></div></div>
           <div class="api-table">
             <div class="api-row api-head"><span>Method</span><span>What it does</span></div>
-            <div class="api-row"><code>renderPreview(markdown, mode, theme)</code><span>Returns sanitized HTML. Mode is <code>"pdf"</code> by default; pass <code>"ppt"</code> for slides. Theme is optional.</span></div>
-            <div class="api-row"><code>splitSlides(markdown)</code><span>Returns slide text sections, split on horizontal rules or headings.</span></div>
-            <div class="api-row"><code>registerFolderFiles(fileList)</code><span>Registers local folder images so relative Markdown image paths can resolve.</span></div>
-            <div class="api-row"><code>imageCount()</code><span>Returns the number of registered image path entries.</span></div>
+            <div class="api-row"><code>MDX.renderPreview(markdown, mode, theme)</code><span>Returns sanitized HTML. Use <code>"pdf"</code> (default) for normal Markdown or <code>"ppt"</code> for slide sections. Theme is optional.</span></div>
+            <div class="api-row"><code>MDX.splitSlides(markdown)</code><span>Returns Markdown slide sections, split on horizontal rules or headings.</span></div>
+            <div class="api-row"><code>MDX.registerFolderFiles(fileList)</code><span>Registers local folder images so matching relative Markdown image paths can resolve.</span></div>
+            <div class="api-row"><code>MDX.imageCount()</code><span>Returns the number of registered image path entries.</span></div>
+            <div class="api-row"><code>MDX.exportPreview(options)</code><span>Opens the browser print dialog for a prepared MDX preview. Options include <code>mode</code> (<code>"pdf"</code>/<code>"ppt"</code>) and slide <code>scope</code> (<code>"all"</code>/<code>"current"</code>).</span></div>
           </div>
         </section>
 
