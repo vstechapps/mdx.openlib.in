@@ -1,4 +1,5 @@
 (function () {
+  const ENRICH_ENDPOINT = "https://api.openlib.in/content/enrich";
   const SAMPLE = `# Ideas to impact
 
 ### A concise field guide to making complex work easier to understand.
@@ -44,6 +45,18 @@ Strong documents help a team move from discussion to clear ownership.
     themeSelect: document.getElementById("theme-select"),
     fontSelect: document.getElementById("font-select"),
     exportBtn: document.getElementById("export-btn"),
+    enrichBtn: document.getElementById("enrich-btn"),
+    enrichDialog: document.getElementById("enrich-dialog"),
+    enrichForm: document.getElementById("enrich-form"),
+    enrichPrompt: document.getElementById("enrich-prompt"),
+    enrichSubmit: document.getElementById("enrich-submit"),
+    enrichSubmitLabel: document.querySelector(".enrich-submit-label"),
+    enrichTitle: document.getElementById("enrich-title"),
+    enrichPromptLabel: document.querySelector(".prompt-label"),
+    enrichNote: document.getElementById("enrich-note"),
+    enrichCancel: document.getElementById("enrich-cancel"),
+    enrichClose: document.getElementById("enrich-close"),
+    enrichError: document.getElementById("enrich-error"),
     exportScopeWrap: document.getElementById("export-scope-wrap"),
     exportScope: document.getElementById("export-scope"),
     mdInput: document.getElementById("md-input"),
@@ -67,6 +80,7 @@ Strong documents help a team move from discussion to clear ownership.
     slideIndex: 0,
     presenting: false,
     folderHint: "",
+    enriching: false,
   };
 
   if (window.marked) {
@@ -148,6 +162,82 @@ Strong documents help a team move from discussion to clear ownership.
     return file.text();
   }
 
+  function openEnrichDialog() {
+    const hasContent = Boolean(els.mdInput.value.trim());
+    els.enrichError.hidden = true;
+    els.enrichError.textContent = "";
+    els.enrichPrompt.value = "";
+    els.enrichTitle.textContent = hasContent ? "Improve your Markdown" : "Create Markdown with AI";
+    els.enrichPromptLabel.textContent = hasContent ? "What would you like to change?" : "What would you like to create?";
+    els.enrichPrompt.placeholder = hasContent
+      ? "For example: Make this more concise and add a short summary at the top."
+      : "For example: Draft a concise project proposal with goals, milestones, and risks.";
+    els.enrichNote.textContent = hasContent
+      ? "Your current Markdown will be sent with this instruction and replaced only after a successful response."
+      : "Your instruction will be used to create Markdown from scratch.";
+    els.enrichSubmitLabel.textContent = hasContent ? "Improve Markdown" : "Create Markdown";
+    els.enrichDialog.showModal();
+    els.enrichPrompt.focus();
+  }
+
+  function closeEnrichDialog() {
+    if (!state.enriching) els.enrichDialog.close();
+  }
+
+  async function enrichMarkdown(event) {
+    event.preventDefault();
+    const prompt = els.enrichPrompt.value.trim();
+    const content = els.mdInput.value;
+    if (!prompt) return;
+
+    state.enriching = true;
+    els.enrichSubmit.disabled = true;
+    els.enrichCancel.disabled = true;
+    els.enrichClose.disabled = true;
+    els.enrichPrompt.disabled = true;
+    els.enrichSubmitLabel.textContent = "Working…";
+    els.enrichError.hidden = true;
+    setStatus(content.trim() ? "Improving Markdown…" : "Creating Markdown…");
+
+    try {
+      const response = await fetch(ENRICH_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content, prompt, contentType: "md" }),
+      });
+      const payload = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        const message = payload && (payload.error || payload.message);
+        throw new Error(message || `Enrichment failed (${response.status})`);
+      }
+
+      const enriched = typeof payload === "string"
+        ? payload
+        : payload && (payload.content ?? (payload.data && payload.data.content) ?? payload.markdown);
+      if (typeof enriched !== "string" || !enriched.trim()) {
+        throw new Error("The enrichment service returned no Markdown content");
+      }
+
+      els.mdInput.value = enriched;
+      state.slideIndex = 0;
+      render();
+      setStatus(content.trim() ? "AI improvement complete" : "AI draft created");
+      els.enrichDialog.close();
+    } catch (error) {
+      els.enrichError.textContent = error instanceof Error ? error.message : "Could not enrich this Markdown";
+      els.enrichError.hidden = false;
+      setStatus("AI enrichment failed");
+    } finally {
+      state.enriching = false;
+      els.enrichSubmit.disabled = false;
+      els.enrichCancel.disabled = false;
+      els.enrichClose.disabled = false;
+      els.enrichPrompt.disabled = false;
+      els.enrichSubmitLabel.textContent = content.trim() ? "Improve Markdown" : "Create Markdown";
+    }
+  }
+
   els.uploadFile.addEventListener("click", async () => {
     const file = els.mdFile.files && els.mdFile.files[0];
     if (!file) {
@@ -191,6 +281,14 @@ Strong documents help a team move from discussion to clear ownership.
   els.mdInput.addEventListener("input", () => {
     state.slideIndex = Math.min(state.slideIndex, Math.max(0, window.MDXMarkdown.splitSlides(els.mdInput.value).length - 1));
     render();
+  });
+
+  els.enrichBtn.addEventListener("click", openEnrichDialog);
+  els.enrichForm.addEventListener("submit", enrichMarkdown);
+  els.enrichCancel.addEventListener("click", closeEnrichDialog);
+  els.enrichClose.addEventListener("click", closeEnrichDialog);
+  els.enrichDialog.addEventListener("cancel", (event) => {
+    if (state.enriching) event.preventDefault();
   });
 
   els.themeSelect.addEventListener("change", () => {

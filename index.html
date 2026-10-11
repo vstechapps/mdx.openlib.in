@@ -101,7 +101,13 @@
       <section class="pane pane-editor">
         <div class="pane-head">
           <h2>MD Content</h2>
-          <span id="file-status" class="status"><span class="status-dot"></span>No file loaded</span>
+          <div class="editor-head-actions">
+            <span id="file-status" class="status"><span class="status-dot"></span>No file loaded</span>
+            <button type="button" id="enrich-btn" class="btn btn-accent btn-enrich">
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="m10 2 1.45 5.05L16.5 8.5l-5.05 1.45L10 15l-1.45-5.05L3.5 8.5l5.05-1.45L10 2Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="m15.5 13 .7 2.3 2.3.7-2.3.7-.7 2.3-.7-2.3-2.3-.7 2.3-.7.7-2.3Z" fill="currentColor"/></svg>
+              <span>AI Assist</span>
+            </button>
+          </div>
         </div>
         <textarea id="md-input" spellcheck="false" placeholder="Write or upload Markdown…"></textarea>
       </section>
@@ -131,6 +137,28 @@
         </div>
       </section>
     </main>
+
+    <dialog id="enrich-dialog" class="enrich-dialog" aria-labelledby="enrich-title">
+      <form id="enrich-form">
+        <div class="dialog-head">
+          <div>
+            <p class="dialog-eyebrow">AI ASSISTANT</p>
+            <h2 id="enrich-title">Create or improve Markdown</h2>
+          </div>
+          <button type="button" id="enrich-close" class="icon-btn" aria-label="Close dialog" title="Close">&times;</button>
+        </div>
+        <label class="prompt-label" for="enrich-prompt">What would you like to create or change?</label>
+        <textarea id="enrich-prompt" rows="4" required maxlength="2000" placeholder="For example: Draft a concise project proposal with goals, milestones, and risks."></textarea>
+        <p id="enrich-note" class="dialog-note">The response will replace the editor content only after it succeeds.</p>
+        <p id="enrich-error" class="enrich-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button type="button" id="enrich-cancel" class="btn">Cancel</button>
+          <button type="submit" id="enrich-submit" class="btn btn-accent">
+            <span class="enrich-submit-label">Generate Markdown</span>
+          </button>
+        </div>
+      </form>
+    </dialog>
 
     <script src="js/markdown.min.js"></script>
     <script src="js/export.js"></script>
