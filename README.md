@@ -20,7 +20,7 @@ with a script tag; it exposes `window.MDX`:
 ```
 
 The optional theme is `classic`, `executive`, `warm`, or `dark`. Include
-`css/markdown-preview-themes.css` to apply those theme styles. Include
+`css/mdx.theme.css` to apply those theme styles. Include
 `css/mdx-app-ui.css` for the MDX app interface and preview layout. The renderer
 also works without a theme parameter, returning only the rendered content.
 `MDX.exportPreview({ mode: "pdf", scope: "all" })` prints an MDX preview using
