@@ -3,18 +3,6 @@
   const DRAFT_STORAGE_KEY = "mdx.markdownDraft.v1";
   const IMAGE_WIDTH = 1080;
   const IMAGE_HEIGHT = 1350;
-  const IMAGE_THEME = {
-    classic: { background: "#fffdf8", ink: "#25221e", muted: "#6c665d", heading: "#171411", accent: "#a9572c", soft: "#f1dfd2", code: "#f3eee7", border: "#d8cfc3" },
-    executive: { background: "#f5f8fa", ink: "#263447", muted: "#66758a", heading: "#142c4c", accent: "#267d88", soft: "#dceff0", code: "#e8eef2", border: "#c9d5df" },
-    warm: { background: "#fff4e4", ink: "#4b3428", muted: "#806453", heading: "#71351f", accent: "#c26a32", soft: "#f5dfc9", code: "#f5e3cd", border: "#dfc4a8" },
-    dark: { background: "#171d25", ink: "#e6e9ed", muted: "#a4afbc", heading: "#ffffff", accent: "#f2a65a", soft: "#3a2e25", code: "#0e141b", border: "#3b4653" },
-  };
-  const IMAGE_FONTS = {
-    "dm-sans": "DM Sans",
-    manrope: "Manrope",
-    lato: "Lato",
-    montserrat: "Montserrat",
-  };
   const SAMPLE = `# Ideas to impact
 
 ### A concise field guide to making complex work easier to understand.
@@ -109,6 +97,11 @@ Strong documents help a team move from discussion to clear ownership.
 
   function setStatus(text) {
     els.fileStatus.textContent = text;
+  }
+
+  function dateStamp() {
+    const date = new Date();
+    return `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
   }
 
   function applyTheme() {
@@ -216,202 +209,59 @@ Strong documents help a team move from discussion to clear ownership.
     els.imageDownloadDialog.showModal();
   }
 
-  function collectTextSegments(node, inherited = {}, segments = []) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      if (node.nodeValue) segments.push({ text: node.nodeValue, ...inherited });
-      return segments;
-    }
-
-    if (node.nodeType !== Node.ELEMENT_NODE) return segments;
-    const tag = node.tagName.toLowerCase();
-    const style = {
-      ...inherited,
-      bold: inherited.bold || tag === "strong" || tag === "b",
-      italic: inherited.italic || tag === "em" || tag === "i",
-      code: inherited.code || tag === "code",
-      color: tag === "a" ? IMAGE_THEME[state.theme].accent : inherited.color,
-    };
-    if (tag === "img") {
-      segments.push({ text: node.alt || "", ...style });
-      return segments;
-    }
-    node.childNodes.forEach((child) => collectTextSegments(child, style, segments));
-    return segments;
-  }
-
-  function canvasFont(segment, fontSize, fontFamily) {
-    const weight = segment.bold ? "700 " : "400 ";
-    const italic = segment.italic ? "italic " : "";
-    const family = segment.code ? "Consolas, monospace" : `"${fontFamily}", Arial, sans-serif`;
-    return `${italic}${weight}${fontSize}px ${family}`;
-  }
-
-  function drawWrappedText(context, segments, x, y, maxWidth, fontSize, lineHeight, color, fontFamily) {
-    let line = [];
-    let lineWidth = 0;
-    const drawLine = () => {
-      let cursorX = x;
-      line.forEach((part) => {
-        context.font = canvasFont(part, fontSize, fontFamily);
-        context.fillStyle = part.color || color;
-        context.fillText(part.text, cursorX, y);
-        cursorX += context.measureText(part.text).width;
-      });
-      y += lineHeight;
-      line = [];
-      lineWidth = 0;
-    };
-
-    segments.forEach((segment) => {
-      const words = segment.text.split(/(\s+)/).filter(Boolean);
-      words.forEach((word) => {
-        context.font = canvasFont(segment, fontSize, fontFamily);
-        const wordWidth = context.measureText(word).width;
-        if (/^\s+$/.test(word) && line.length === 0) return;
-        if (line.length && lineWidth + wordWidth > maxWidth) drawLine();
-        line.push({ text: word, ...segment });
-        lineWidth += wordWidth;
-      });
-    });
-    if (line.length) drawLine();
-    return y;
-  }
-
-  function loadSlideImage(source) {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      if (/^https?:/i.test(source)) image.crossOrigin = "anonymous";
-      image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error(`Could not load slide image: ${source}`));
-      image.src = source;
-    });
-  }
-
-  function ensureImageFits(y) {
-    if (y > IMAGE_HEIGHT - 72) {
-      throw new Error("Slide content is too long for an Instagram image. Split it with --- to make more slides.");
-    }
-  }
-
   async function slideImageBlob(slide) {
     await document.fonts.ready;
-    const palette = IMAGE_THEME[state.theme];
-    const fontFamily = IMAGE_FONTS[state.font] || IMAGE_FONTS["dm-sans"];
-    const canvas = document.createElement("canvas");
-    canvas.width = IMAGE_WIDTH;
-    canvas.height = IMAGE_HEIGHT;
-    const context = canvas.getContext("2d");
-    if (!context) throw new Error("Your browser could not create an image canvas");
 
-    context.fillStyle = palette.background;
-    context.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
-    context.textBaseline = "top";
-    const left = 72;
-    const width = IMAGE_WIDTH - left * 2;
-    let y = 72;
+    const frame = document.createElement("div");
+    frame.id = "image-export-frame";
+    frame.className = els.previewFrame.className;
+    frame.style.cssText = `position:fixed;left:0;top:0;width:${IMAGE_WIDTH}px;height:${IMAGE_HEIGHT}px;min-height:${IMAGE_HEIGHT}px;opacity:0;pointer-events:none;`;
+    const preview = document.createElement("div");
+    preview.id = "preview";
+    preview.className = els.preview.className;
+    preview.style.height = "100%";
+    const slideClone = slide.cloneNode(true);
+    slideClone.classList.add("is-active");
+    slideClone.style.display = "block";
+    slideClone.style.width = "100%";
+    slideClone.style.height = "100%";
+    slideClone.style.minHeight = "0";
+    preview.appendChild(slideClone);
+    frame.appendChild(preview);
+    document.body.appendChild(frame);
 
-    for (const element of Array.from(slide.children)) {
-      const tag = element.tagName.toLowerCase();
-      if (tag === "hr") {
-        y += 14;
-        context.strokeStyle = palette.border;
-        context.beginPath();
-        context.moveTo(left, y);
-        context.lineTo(IMAGE_WIDTH - left, y);
-        context.stroke();
-        y += 24;
-        ensureImageFits(y);
-        continue;
-      }
-
-      if (tag === "img" || (tag === "p" && element.children.length === 1 && element.firstElementChild.tagName === "IMG")) {
-        const imageElement = tag === "img" ? element : element.firstElementChild;
-        const image = await loadSlideImage(imageElement.src);
-        const scale = Math.min(width / image.naturalWidth, 420 / image.naturalHeight, 1);
-        const imageWidth = image.naturalWidth * scale;
-        const imageHeight = image.naturalHeight * scale;
-        if (y + imageHeight + 24 > IMAGE_HEIGHT - 72) {
-          throw new Error("Slide content is too long for an Instagram image. Split it with --- to make more slides.");
-        }
-        context.drawImage(image, left, y, imageWidth, imageHeight);
-        y += imageHeight + 24;
-        ensureImageFits(y);
-        continue;
-      }
-
-      if (tag === "table") {
-        const rows = Array.from(element.querySelectorAll("tr"));
-        rows.forEach((row, rowIndex) => {
-          const cells = Array.from(row.children);
-          const segments = [];
-          cells.forEach((cell, cellIndex) => {
-            if (cellIndex) segments.push({ text: "  |  " });
-            segments.push(...collectTextSegments(cell, { bold: rowIndex === 0 }));
-          });
-          y = drawWrappedText(context, segments, left, y, width, 25, 34, palette.ink, fontFamily) + 10;
+    try {
+      const cloneImages = Array.from(slideClone.querySelectorAll("img"));
+      await Promise.all(cloneImages.map((image) => {
+        if (image.complete && image.naturalWidth) return image.decode();
+        return new Promise((resolve, reject) => {
+          image.addEventListener("load", () => resolve(image.decode()), { once: true });
+          image.addEventListener("error", () => reject(new Error(`Could not load slide image: ${image.src}`)), { once: true });
         });
-        y += 14;
-        ensureImageFits(y);
-        continue;
-      }
+      }));
 
-      if (tag === "ul" || tag === "ol") {
-        Array.from(element.children).filter((child) => child.tagName.toLowerCase() === "li").forEach((item, index) => {
-          const marker = tag === "ol" ? `${index + 1}. ` : "• ";
-          context.font = `400 30px "${fontFamily}", Arial, sans-serif`;
-          context.fillStyle = palette.accent;
-          context.fillText(marker, left + 8, y);
-          y = drawWrappedText(context, collectTextSegments(item), left + 46, y, width - 46, 30, 43, palette.ink, fontFamily) + 8;
-          ensureImageFits(y);
-        });
-        y += 8;
-        ensureImageFits(y);
-        continue;
-      }
-
-      if (tag === "blockquote") {
-        context.fillStyle = palette.accent;
-        context.fillRect(left, y, 5, 48);
-        y = drawWrappedText(context, collectTextSegments(element), left + 20, y, width - 20, 28, 42, palette.ink, fontFamily) + 18;
-        ensureImageFits(y);
-        continue;
-      }
-
-      if (tag === "pre") {
-        const segments = collectTextSegments(element, { code: true });
-        y = drawWrappedText(context, segments, left + 12, y, width - 24, 23, 32, palette.ink, fontFamily) + 22;
-        ensureImageFits(y);
-        continue;
-      }
-
-      const heading = /^h[1-3]$/.test(tag);
-      const fontSize = tag === "h1" ? 54 : tag === "h2" ? 40 : tag === "h3" ? 34 : 30;
-      const color = heading ? palette.heading : palette.ink;
-      if (tag === "h2" || tag === "h3") y += 12;
-      y = drawWrappedText(context, collectTextSegments(element), left, y, width, fontSize, Math.round(fontSize * 1.35), color, fontFamily) + (heading ? 16 : 20);
-      if (tag === "h1") {
-        context.strokeStyle = palette.accent;
-        context.lineWidth = 3;
-        context.beginPath();
-        context.moveTo(left, y - 10);
-        context.lineTo(IMAGE_WIDTH - left, y - 10);
-        context.stroke();
-        y += 8;
-      }
-
-      ensureImageFits(y);
-    }
-
-    return new Promise((resolve, reject) => {
-      try {
+      const canvas = await window.html2canvas(frame, {
+        backgroundColor: window.getComputedStyle(frame).backgroundColor,
+        height: IMAGE_HEIGHT,
+        logging: false,
+        scale: 1,
+        useCORS: true,
+        width: IMAGE_WIDTH,
+        windowHeight: IMAGE_HEIGHT,
+        windowWidth: IMAGE_WIDTH,
+        onclone: (clonedDocument) => {
+          clonedDocument.getElementById("image-export-frame").style.opacity = "1";
+        },
+      });
+      return await new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {
           if (blob) resolve(blob);
           else reject(new Error("Your browser could not create a PNG image"));
         }, "image/png");
-      } catch (error) {
-        reject(error);
-      }
-    });
+      });
+    } finally {
+      frame.remove();
+    }
   }
 
   async function downloadImages() {
@@ -430,10 +280,10 @@ Strong documents help a team move from discussion to clear ownership.
       for (let index = 0; index < selectedSlides.length; index += 1) {
         const blob = await slideImageBlob(selectedSlides[index]);
         const slideNumber = els.exportScope.value === "current" ? state.slideIndex + 1 : index + 1;
-        images.push({ blob, filename: `mdx-instagram-${String(slideNumber).padStart(2, "0")}.png` });
+        images.push({ blob, filename: `mdx-image-${dateStamp()}-${String(slideNumber).padStart(2, "0")}.png` });
       }
       showImageDownloads(images);
-      setStatus(`${selectedSlides.length} Instagram image${selectedSlides.length === 1 ? "" : "s"} ready to download`);
+      setStatus(`${selectedSlides.length} image${selectedSlides.length === 1 ? "" : "s"} ready to download`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not download images");
       console.error("Could not export Markdown slides as images", error);

@@ -6,8 +6,8 @@ Getting started guide: [getting-started/index.html](getting-started/index.html).
 ## MDX JS bundle
 
 `js/mdx.min.js` is a standalone browser bundle containing Marked 15.0.7,
-DOMPurify 3.2.5, the Markdown renderer, and the preview export helper. Load it
-with a script tag; it exposes `window.MDX`:
+DOMPurify 3.2.5, html2canvas 1.4.1, the Markdown renderer, and the preview
+export helper. Load it with a script tag; it exposes `window.MDX`:
 
 ```html
 <script src="https://mdx.openlib.in/js/mdx.min.js" defer></script>
@@ -27,14 +27,18 @@ also works without a theme parameter, returning only the rendered content.
 the browser's print dialog.
 
 The app also provides an MD2IMG mode that downloads the current slide or all
-slides as 1080 × 1350 PNG images for Instagram posts. Markdown drafts are
-automatically saved in the current browser's local storage and restored when
-the app is reopened in that browser.
+slides as 1080 × 1350 PNG images rendered from the preview's HTML styles.
+Downloaded images use
+`mdx-image-YYYYMMDD-NN.png` names; PDF and PPT print exports use
+`mdx-pdf-YYYYMMDD` and `mdx-ppt-YYYYMMDD` as their suggested filenames.
+Markdown drafts are automatically saved in the current browser's local storage
+and restored when the app is reopened in that browser.
 
-The editable sources are `src/markdown.js` and `src/export.js`; their pinned
-dependencies are `src/marked.min.js` and `src/purify.min.js`. To regenerate the
-browser bundle after changing a source file, run:
+The editable sources are `src/markdown.js` and `src/export.js`; pinned
+dependencies are `src/marked.min.js`, `src/purify.min.js`, and
+`src/html2canvas.min.js` (MIT license in `src/html2canvas.LICENSE`). To
+regenerate the browser bundle after changing a source file, run:
 
 ```sh
-npx --yes terser src/marked.min.js src/purify.min.js src/markdown.js src/export.js --compress --mangle --output js/mdx.min.js
+npx --yes terser src/marked.min.js src/purify.min.js src/html2canvas.min.js src/markdown.js src/export.js --compress --mangle --output js/mdx.min.js
 ```
