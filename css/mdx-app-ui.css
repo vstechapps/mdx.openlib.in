@@ -426,6 +426,22 @@ body {
 .dialog-actions { display: flex; justify-content: flex-end; gap: 0.55rem; margin-top: 1.15rem; }
 .dialog-actions button:disabled { cursor: wait; opacity: 0.7; transform: none; }
 
+.image-download-dialog {
+  width: min(92vw, 510px);
+  padding: 1.35rem;
+  border: 1px solid #465565;
+  border-radius: 10px;
+  background: #171f28;
+  color: var(--ink);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.image-download-dialog::backdrop { background: rgba(5, 9, 13, 0.72); backdrop-filter: blur(3px); }
+.image-download-dialog .dialog-head { margin-bottom: 0.8rem; }
+.image-download-dialog h2 { margin: 0; font: 600 1.25rem var(--display-font); }
+.image-download-dialog .dialog-note { margin-bottom: 1rem; }
+.image-download-list { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+
 .status {
   font-size: 0.75rem;
   color: var(--muted);

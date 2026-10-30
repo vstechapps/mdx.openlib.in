@@ -26,6 +26,11 @@ also works without a theme parameter, returning only the rendered content.
 `MDX.exportPreview({ mode: "pdf", scope: "all" })` prints an MDX preview using
 the browser's print dialog.
 
+The app also provides an MD2IMG mode that downloads the current slide or all
+slides as 1080 × 1350 PNG images for Instagram posts. Markdown drafts are
+automatically saved in the current browser's local storage and restored when
+the app is reopened in that browser.
+
 The editable sources are `src/markdown.js` and `src/export.js`; their pinned
 dependencies are `src/marked.min.js` and `src/purify.min.js`. To regenerate the
 browser bundle after changing a source file, run:

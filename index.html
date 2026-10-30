@@ -30,6 +30,10 @@
             <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="3.25" width="15" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M7 17h6M10 13.75V17M7 7h6M7 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             <span>MD2PPT</span>
           </button>
+          <button type="button" class="mode-tab" data-mode="img" role="tab" aria-selected="false">
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="2.5" width="15" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.5"/><path d="m3.5 14 4-4 2.5 2.5 2-2L17 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>MD2IMG</span>
+          </button>
         </nav>
       </div>
     </header>
@@ -84,7 +88,7 @@
 
       <div class="toolbar-group toolbar-export">
         <label class="export-scope is-hidden" id="export-scope-wrap">
-          <span class="toolbar-label">Deck range</span>
+          <span id="export-scope-label" class="toolbar-label">Deck range</span>
           <select id="export-scope">
             <option value="all">All slides</option>
             <option value="current">Current page</option>
@@ -163,6 +167,18 @@
           </button>
         </div>
       </form>
+    </dialog>
+
+    <dialog id="image-download-dialog" class="image-download-dialog" aria-labelledby="image-download-title">
+      <div class="dialog-head">
+        <div>
+          <p class="dialog-eyebrow">INSTAGRAM-READY PNG</p>
+          <h2 id="image-download-title">Download your images</h2>
+        </div>
+        <button type="button" id="image-download-close" class="icon-btn" aria-label="Close dialog" title="Close">&times;</button>
+      </div>
+      <p class="dialog-note">Each slide is a 1080 × 1350 PNG. Select each image below to download it.</p>
+      <div id="image-download-list" class="image-download-list"></div>
     </dialog>
 
     <script src="js/mdx.min.js"></script>
