@@ -92,7 +92,7 @@
       .map((slide, index) => `<section class="slide${index === 0 ? " is-active" : ""}" data-slide="${index}">${renderHtml(slide)}</section>`)
       .join("");
 
-    if (!["classic", "executive", "warm", "dark"].includes(theme)) return content;
+    if (!["classic", "executive", "warm", "dark", "ocean", "forest", "midnight", "lavender", "graphite", "rose"].includes(theme)) return content;
 
     const pptClass = mode === "ppt" ? " ppt-mode" : "";
     return `<div class="preview-body md-${theme}${pptClass} theme-${theme}">${content}</div>`;

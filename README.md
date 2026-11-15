@@ -19,7 +19,8 @@ export helper. Load it with a script tag; it exposes `window.MDX`:
 </script>
 ```
 
-The optional theme is `classic`, `executive`, `warm`, or `dark`. Include
+The optional theme is `classic`, `executive`, `warm`, `dark`, `ocean`,
+`forest`, `midnight`, `lavender`, `graphite`, or `rose`. Include
 `css/mdx.theme.css` to apply those theme styles. Include
 `css/mdx-app-ui.css` for the MDX app interface and preview layout. The renderer
 also works without a theme parameter, returning only the rendered content.

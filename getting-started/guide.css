@@ -309,8 +309,14 @@ pre.compact { padding: 11px 16px; }
 .swatch { width: 9px; height: 9px; border-radius: 2px; }
 .swatch.classic { background: #a9572c; }
 .swatch.executive { background: #267d88; }
-.swatch.warm { background: #c26a32; }
+.swatch.warm { background: #9a684a; }
 .swatch.dark { background: #171d25; }
+.swatch.ocean { background: #167d9a; }
+.swatch.forest { background: #4d7859; }
+.swatch.midnight { background: #151e2e; }
+.swatch.lavender { background: #7162b5; }
+.swatch.graphite { background: #596f7d; }
+.swatch.rose { background: #a95071; }
 
 .api-table {
   margin-left: 48px;

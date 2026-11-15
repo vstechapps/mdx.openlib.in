@@ -1,7 +1,13 @@
 .md-classic,
 .md-executive,
 .md-warm,
-.md-dark {
+.md-dark,
+.md-ocean,
+.md-forest,
+.md-midnight,
+.md-lavender,
+.md-graphite,
+.md-rose {
   --theme-ink: #25221e;
   --theme-muted: #6c665d;
   --theme-heading: #171411;
@@ -39,15 +45,15 @@
 }
 
 .md-warm {
-  font-family: Georgia, "Times New Roman", serif;
-  --theme-ink: #4b3428;
-  --theme-muted: #806453;
-  --theme-heading: #71351f;
-  --theme-accent: #c26a32;
-  --theme-accent-soft: #f5dfc9;
-  --theme-surface: #fff4e4;
-  --theme-code: #f5e3cd;
-  --theme-border: #dfc4a8;
+  font-family: "DM Sans", sans-serif;
+  --theme-ink: #343431;
+  --theme-muted: #70695f;
+  --theme-heading: #3d3831;
+  --theme-accent: #9a684a;
+  --theme-accent-soft: #ede7df;
+  --theme-surface: #f8f6f1;
+  --theme-code: #efebe5;
+  --theme-border: #d9d2c7;
 }
 
 .md-dark {
@@ -62,6 +68,78 @@
   --theme-border: #3b4653;
 }
 
+.md-ocean {
+  font-family: "DM Sans", sans-serif;
+  --theme-ink: #263c49;
+  --theme-muted: #5e7480;
+  --theme-heading: #16394b;
+  --theme-accent: #167d9a;
+  --theme-accent-soft: #dceef2;
+  --theme-surface: #f3f8fa;
+  --theme-code: #e7f0f3;
+  --theme-border: #c8dce2;
+}
+
+.md-forest {
+  font-family: "Manrope", sans-serif;
+  --theme-ink: #2d3b32;
+  --theme-muted: #65756a;
+  --theme-heading: #20392a;
+  --theme-accent: #4d7859;
+  --theme-accent-soft: #e1ece2;
+  --theme-surface: #f4f8f3;
+  --theme-code: #e9f0e8;
+  --theme-border: #cfddce;
+}
+
+.md-midnight {
+  font-family: "Manrope", sans-serif;
+  --theme-ink: #e4e9f2;
+  --theme-muted: #a6b2c6;
+  --theme-heading: #f4f6fb;
+  --theme-accent: #78a9ff;
+  --theme-accent-soft: #253858;
+  --theme-surface: #151e2e;
+  --theme-code: #101827;
+  --theme-border: #35445e;
+}
+
+.md-lavender {
+  font-family: "Manrope", sans-serif;
+  --theme-ink: #38364a;
+  --theme-muted: #706d84;
+  --theme-heading: #302c50;
+  --theme-accent: #7162b5;
+  --theme-accent-soft: #ece8f7;
+  --theme-surface: #f8f6fc;
+  --theme-code: #efecf7;
+  --theme-border: #d8d2e9;
+}
+
+.md-graphite {
+  font-family: "Lato", sans-serif;
+  --theme-ink: #353b40;
+  --theme-muted: #68737b;
+  --theme-heading: #222a30;
+  --theme-accent: #596f7d;
+  --theme-accent-soft: #e5ebee;
+  --theme-surface: #f5f6f6;
+  --theme-code: #eaedef;
+  --theme-border: #d2d9dc;
+}
+
+.md-rose {
+  font-family: "DM Sans", sans-serif;
+  --theme-ink: #493940;
+  --theme-muted: #79666f;
+  --theme-heading: #452b38;
+  --theme-accent: #a95071;
+  --theme-accent-soft: #f2e2e8;
+  --theme-surface: #fbf6f7;
+  --theme-code: #f2eaed;
+  --theme-border: #e2d2d9;
+}
+
 .preview-body.font-dm-sans { font-family: "DM Sans", sans-serif; }
 .preview-body.font-manrope { font-family: "Manrope", sans-serif; }
 .preview-body.font-lato { font-family: "Lato", sans-serif; }
@@ -69,13 +147,16 @@
 
 .theme-classic { background: #fffdf8; }
 .theme-executive { background: #f5f8fa; }
-.theme-warm { background: #fff4e4; }
+.theme-warm { background: #f8f6f1; }
 .theme-dark { background: #171d25; }
+.theme-ocean { background: #f3f8fa; }
+.theme-forest { background: #f4f8f3; }
+.theme-midnight { background: #151e2e; }
+.theme-lavender { background: #f8f6fc; }
+.theme-graphite { background: #f5f6f6; }
+.theme-rose { background: #fbf6f7; }
 
-.md-classic h1,
-.md-executive h1,
-.md-warm h1,
-.md-dark h1 {
+.preview-body h1 {
   border-bottom: 2px solid var(--theme-accent);
   padding-bottom: 0.45rem;
 }
@@ -254,12 +335,42 @@
 
   body.export-pdf #preview-frame.theme-warm,
   body.export-ppt #preview-frame.theme-warm {
-    background: #fff4e4 !important;
+    background: #f8f6f1 !important;
   }
 
   body.export-pdf #preview-frame.theme-dark,
   body.export-ppt #preview-frame.theme-dark {
     background: #171d25 !important;
+  }
+
+  body.export-pdf #preview-frame.theme-ocean,
+  body.export-ppt #preview-frame.theme-ocean {
+    background: #f3f8fa !important;
+  }
+
+  body.export-pdf #preview-frame.theme-forest,
+  body.export-ppt #preview-frame.theme-forest {
+    background: #f4f8f3 !important;
+  }
+
+  body.export-pdf #preview-frame.theme-midnight,
+  body.export-ppt #preview-frame.theme-midnight {
+    background: #151e2e !important;
+  }
+
+  body.export-pdf #preview-frame.theme-lavender,
+  body.export-ppt #preview-frame.theme-lavender {
+    background: #f8f6fc !important;
+  }
+
+  body.export-pdf #preview-frame.theme-graphite,
+  body.export-ppt #preview-frame.theme-graphite {
+    background: #f5f6f6 !important;
+  }
+
+  body.export-pdf #preview-frame.theme-rose,
+  body.export-ppt #preview-frame.theme-rose {
+    background: #fbf6f7 !important;
   }
 
   body.export-pdf .preview-body {
