@@ -1,8 +1,10 @@
 (function () {
   const ENRICH_ENDPOINT = "https://api.openlib.in/content/enrich";
   const DRAFT_STORAGE_KEY = "mdx.markdownDraft.v1";
-  const IMAGE_WIDTH = 1080;
-  const IMAGE_HEIGHT = 1350;
+  const IMAGE_LAYOUTS = {
+    portrait: { width: 1080 },
+    landscape: { width: 1920 },
+  };
   const SAMPLE = `# Ideas to impact
 
 ### A concise field guide to making complex work easier to understand.
@@ -66,6 +68,8 @@ Strong documents help a team move from discussion to clear ownership.
     exportScopeWrap: document.getElementById("export-scope-wrap"),
     exportScopeLabel: document.getElementById("export-scope-label"),
     exportScope: document.getElementById("export-scope"),
+    imageLayoutWrap: document.getElementById("image-layout-wrap"),
+    imageLayout: document.getElementById("image-layout"),
     mdInput: document.getElementById("md-input"),
     preview: document.getElementById("preview"),
     previewFrame: document.getElementById("preview-frame"),
@@ -154,6 +158,7 @@ Strong documents help a team move from discussion to clear ownership.
     els.pptControls.classList.toggle("is-hidden", !presentation);
     els.presentBtn.classList.toggle("is-hidden", state.mode !== "ppt");
     els.exportScopeWrap.classList.toggle("is-hidden", !presentation);
+    els.imageLayoutWrap.classList.toggle("is-hidden", state.mode !== "img");
     els.exportScopeLabel.textContent = state.mode === "img" ? "Image range" : "Deck range";
     els.prevSlide.classList.toggle("is-hidden", !presentation);
     els.nextSlide.classList.toggle("is-hidden", !presentation);
@@ -212,20 +217,21 @@ Strong documents help a team move from discussion to clear ownership.
   async function slideImageBlob(slide) {
     await document.fonts.ready;
 
+    const layout = IMAGE_LAYOUTS[els.imageLayout.value] || IMAGE_LAYOUTS.portrait;
     const frame = document.createElement("div");
     frame.id = "image-export-frame";
     frame.className = els.previewFrame.className;
-    frame.style.cssText = `position:fixed;left:0;top:0;width:${IMAGE_WIDTH}px;height:${IMAGE_HEIGHT}px;min-height:${IMAGE_HEIGHT}px;opacity:0;pointer-events:none;`;
+    frame.style.cssText = `position:fixed;left:0;top:0;width:${layout.width}px;min-height:0;opacity:0;pointer-events:none;`;
     const preview = document.createElement("div");
     preview.id = "preview";
     preview.className = els.preview.className;
-    preview.style.height = "100%";
+    preview.style.cssText = "height:auto;min-height:0;display:block;";
     const slideClone = slide.cloneNode(true);
     slideClone.classList.add("is-active");
     slideClone.style.display = "block";
     slideClone.style.width = "100%";
-    slideClone.style.height = "100%";
     slideClone.style.minHeight = "0";
+    slideClone.style.padding = "40px";
     preview.appendChild(slideClone);
     frame.appendChild(preview);
     document.body.appendChild(frame);
@@ -240,15 +246,18 @@ Strong documents help a team move from discussion to clear ownership.
         });
       }));
 
+      const captureHeight = Math.ceil(slideClone.scrollHeight);
+      frame.style.height = `${captureHeight}px`;
+
       const canvas = await window.html2canvas(frame, {
         backgroundColor: window.getComputedStyle(frame).backgroundColor,
-        height: IMAGE_HEIGHT,
+        height: captureHeight,
         logging: false,
         scale: 1,
         useCORS: true,
-        width: IMAGE_WIDTH,
-        windowHeight: IMAGE_HEIGHT,
-        windowWidth: IMAGE_WIDTH,
+        width: layout.width,
+        windowHeight: captureHeight,
+        windowWidth: layout.width,
         onclone: (clonedDocument) => {
           clonedDocument.getElementById("image-export-frame").style.opacity = "1";
         },
@@ -435,6 +444,10 @@ Strong documents help a team move from discussion to clear ownership.
   els.fontSelect.addEventListener("change", () => {
     state.font = els.fontSelect.value;
     render();
+  });
+
+  els.imageLayout.addEventListener("change", () => {
+    if (state.mode === "img") setStatus(`Image layout: ${els.imageLayout.value}`);
   });
 
   els.tabs.forEach((tab) => {

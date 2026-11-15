@@ -27,7 +27,8 @@ also works without a theme parameter, returning only the rendered content.
 the browser's print dialog.
 
 The app also provides an MD2IMG mode that downloads the current slide or all
-slides as 1080 × 1350 PNG images rendered from the preview's HTML styles.
+slides as PNG images rendered from the preview's HTML styles. Choose portrait
+or landscape layout; each image is cropped to its slide content height.
 Downloaded images use
 `mdx-image-YYYYMMDD-NN.png` names; PDF and PPT print exports use
 `mdx-pdf-YYYYMMDD` and `mdx-ppt-YYYYMMDD` as their suggested filenames.

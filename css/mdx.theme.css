@@ -206,20 +206,32 @@
     display: block;
     min-height: 0;
     height: auto;
+    overflow: visible !important;
     padding: 0;
     margin: 0;
   }
 
   body.export-pdf #preview-frame {
     position: static;
+    display: block;
     width: auto;
+    height: auto !important;
     min-height: 0;
+    max-height: none;
     border: 0;
     margin: 0;
     padding: 10mm 12mm;
     overflow: visible !important;
     box-shadow: none;
     background: #fff;
+  }
+
+  body.export-pdf #preview,
+  body.export-pdf .preview-body {
+    display: block;
+    height: auto !important;
+    min-height: 0;
+    overflow: visible !important;
   }
 
   body.export-pdf #preview-frame,
