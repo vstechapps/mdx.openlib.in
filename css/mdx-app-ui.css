@@ -411,17 +411,7 @@ body {
   margin-bottom: 0.55rem;
 }
 
-.ai-assist-head .dialog-eyebrow { margin-bottom: 0.1rem; }
 .ai-assist-head h3 { margin: 0; color: #e4eaf0; font: 600 0.85rem var(--display-font); }
-
-.ai-assist-hint {
-  max-width: 58%;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.7rem;
-  line-height: 1.4;
-  text-align: right;
-}
 
 .ai-prompt-form { display: flex; align-items: stretch; gap: 0.5rem; }
 .ai-run-btn { flex: 0 0 auto; align-self: stretch; min-height: 3.1rem; }
@@ -475,7 +465,6 @@ body {
   .editor-head-actions .status { max-width: 38%; font-size: 0.68rem; }
   .ai-assist { padding: 0.6rem; }
   .ai-assist-head { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
-  .ai-assist-hint { max-width: none; text-align: left; }
   .ai-prompt-form { flex-direction: column; }
   .ai-run-btn { align-self: flex-end; min-height: 2.35rem; }
   .ai-review { align-items: flex-start; flex-direction: column; }
