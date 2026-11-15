@@ -340,6 +340,7 @@ Strong documents help a team move from discussion to clear ownership.
       state.slideIndex = 0;
       render();
       els.enrichReview.classList.remove("is-hidden");
+      els.mdInput.classList.add("has-ai-review");
       els.enrichReview.querySelectorAll("button").forEach((button) => {
         button.disabled = false;
       });
@@ -370,6 +371,7 @@ Strong documents help a team move from discussion to clear ownership.
     if (state.previousMarkdown === null) return;
     state.previousMarkdown = null;
     els.enrichReview.classList.add("is-hidden");
+    els.mdInput.classList.remove("has-ai-review");
     saveDraft();
     setStatus("AI changes kept");
     els.enrichNote.textContent = "Changes saved. Enter another prompt to continue editing.";
@@ -380,6 +382,7 @@ Strong documents help a team move from discussion to clear ownership.
     els.mdInput.value = state.previousMarkdown;
     state.previousMarkdown = null;
     els.enrichReview.classList.add("is-hidden");
+    els.mdInput.classList.remove("has-ai-review");
     state.slideIndex = 0;
     render();
     saveDraft();
@@ -390,6 +393,7 @@ Strong documents help a team move from discussion to clear ownership.
   function clearAiReview() {
     state.previousMarkdown = null;
     els.enrichReview.classList.add("is-hidden");
+    els.mdInput.classList.remove("has-ai-review");
     els.enrichNote.textContent = "Describe an edit or ask AI to create Markdown. The result appears in the editor below.";
   }
 

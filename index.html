@@ -122,27 +122,26 @@
             <span id="file-status" class="status"><span class="status-dot"></span>No file loaded</span>
           </div>
         </div>
-        <textarea id="md-input" spellcheck="false" placeholder="Write or upload Markdown…"></textarea>
-        <section class="ai-assist" aria-labelledby="ai-assist-title">
-          <div class="ai-assist-head">
-            <h3 id="ai-assist-title">AI Assist</h3>
+        <div class="md-editor-wrap">
+          <textarea id="md-input" spellcheck="false" placeholder="Write or upload Markdown…"></textarea>
+          <div id="enrich-review" class="ai-review is-hidden">
+            <span>AI update ready</span>
+            <div class="ai-review-actions">
+              <button type="button" id="enrich-revert" class="btn btn-tiny">Undo</button>
+              <button type="button" id="enrich-keep" class="btn btn-accent btn-tiny">Keep changes</button>
+            </div>
           </div>
+        </div>
+        <section class="ai-assist" aria-label="Prompt">
           <p id="enrich-note" class="sr-only" role="status" aria-live="polite"></p>
           <form id="enrich-form" class="ai-prompt-form">
-            <label class="sr-only" for="enrich-prompt">Prompt for AI Assist</label>
+            <label class="sr-only" for="enrich-prompt">Prompt</label>
             <textarea id="enrich-prompt" rows="2" required maxlength="2000" placeholder="Try: Create a presentation about [topic]; add details about [subject]; make this more concise; or add relevant images from the web."></textarea>
             <button type="submit" id="enrich-submit" class="btn btn-accent ai-run-btn">
               <span class="enrich-submit-label">Run prompt</span>
             </button>
           </form>
           <p id="enrich-error" class="enrich-error ai-assist-error" role="alert" hidden></p>
-          <div id="enrich-review" class="ai-review is-hidden">
-            <span>Review the updated Markdown</span>
-            <div class="ai-review-actions">
-              <button type="button" id="enrich-revert" class="btn btn-tiny">Undo</button>
-              <button type="button" id="enrich-keep" class="btn btn-accent btn-tiny">Keep changes</button>
-            </div>
-          </div>
         </section>
       </section>
 
