@@ -17,6 +17,7 @@
   --theme-code: #f1ece4;
   --theme-border: #d8cfc3;
   color: var(--theme-ink);
+  font-family: "DM Sans", sans-serif;
   font-size: 1rem;
   line-height: 1.68;
   -webkit-print-color-adjust: exact;
@@ -24,7 +25,6 @@
 }
 
 .md-classic {
-  font-family: Georgia, "Times New Roman", serif;
   --theme-accent: #a9572c;
   --theme-accent-soft: #f1dfd2;
   --theme-surface: #fffdf8;
@@ -33,7 +33,6 @@
 }
 
 .md-executive {
-  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   --theme-ink: #263447;
   --theme-muted: #66758a;
   --theme-heading: #142c4c;
@@ -45,7 +44,6 @@
 }
 
 .md-warm {
-  font-family: "DM Sans", sans-serif;
   --theme-ink: #343431;
   --theme-muted: #70695f;
   --theme-heading: #3d3831;
@@ -57,7 +55,6 @@
 }
 
 .md-dark {
-  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   --theme-ink: #e6e9ed;
   --theme-muted: #a4afbc;
   --theme-heading: #ffffff;
@@ -69,7 +66,6 @@
 }
 
 .md-ocean {
-  font-family: "DM Sans", sans-serif;
   --theme-ink: #263c49;
   --theme-muted: #5e7480;
   --theme-heading: #16394b;
@@ -81,7 +77,6 @@
 }
 
 .md-forest {
-  font-family: "Manrope", sans-serif;
   --theme-ink: #2d3b32;
   --theme-muted: #65756a;
   --theme-heading: #20392a;
@@ -93,7 +88,6 @@
 }
 
 .md-midnight {
-  font-family: "Manrope", sans-serif;
   --theme-ink: #e4e9f2;
   --theme-muted: #a6b2c6;
   --theme-heading: #f4f6fb;
@@ -105,7 +99,6 @@
 }
 
 .md-lavender {
-  font-family: "Manrope", sans-serif;
   --theme-ink: #38364a;
   --theme-muted: #706d84;
   --theme-heading: #302c50;
@@ -117,7 +110,6 @@
 }
 
 .md-graphite {
-  font-family: "Lato", sans-serif;
   --theme-ink: #353b40;
   --theme-muted: #68737b;
   --theme-heading: #222a30;
@@ -129,7 +121,6 @@
 }
 
 .md-rose {
-  font-family: "DM Sans", sans-serif;
   --theme-ink: #493940;
   --theme-muted: #79666f;
   --theme-heading: #452b38;
@@ -159,12 +150,6 @@
 .preview-body h1 {
   border-bottom: 2px solid var(--theme-accent);
   padding-bottom: 0.45rem;
-}
-
-.md-executive h1,
-.md-executive h2,
-.md-executive h3 {
-  letter-spacing: 0.01em;
 }
 
 .preview-body h1 {
