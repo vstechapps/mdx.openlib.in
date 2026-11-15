@@ -254,6 +254,19 @@
     margin: 14mm;
   }
 
+  @page mdx-ppt-landscape {
+    size: 304.8mm 171.45mm;
+    margin: 0;
+  }
+
+  @page mdx-ppt-portrait {
+    size: 171.45mm 304.8mm;
+    margin: 0;
+  }
+
+  body.export-ppt.export-landscape { page: mdx-ppt-landscape; }
+  body.export-ppt.export-portrait { page: mdx-ppt-portrait; }
+
   html,
   body {
     background: #fff !important;
@@ -400,13 +413,65 @@
   }
 
   body.export-ppt #preview-frame {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    overflow: visible !important;
+    border: 0;
+    margin: 0;
     padding: 0;
+    box-shadow: none;
+  }
+
+  body.export-ppt .navbar,
+  body.export-ppt .toolbar,
+  body.export-ppt .site-footer,
+  body.export-ppt .pane-editor,
+  body.export-ppt .pane-head,
+  body.export-ppt .nav-arrow,
+  body.export-ppt .present-exit,
+  body.export-ppt .present-pos {
+    display: none !important;
+  }
+
+  body.export-ppt .workspace,
+  body.export-ppt .pane-preview,
+  body.export-ppt .preview-stage {
+    display: block;
+    width: auto;
+    min-height: 0;
+    height: auto;
+    overflow: visible !important;
+    padding: 0;
+    margin: 0;
+  }
+
+  body.export-ppt .preview-body {
+    display: block;
+    min-height: 0;
+    height: auto;
+    overflow: visible !important;
   }
 
   body.export-ppt .slide {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100vh;
     min-height: 100vh;
     padding: 18mm 16mm;
-    background: inherit;
+    background: var(--theme-surface);
+  }
+
+  body.export-ppt.export-portrait .slide {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+  }
+
+  body.export-ppt.export-landscape .slide {
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
 
   body.is-presenting .nav-arrow,

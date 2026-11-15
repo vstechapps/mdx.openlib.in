@@ -3,19 +3,21 @@
   let originalDocumentTitle;
 
   function clearExportState() {
-    document.body.classList.remove("export-pdf", "export-ppt", "export-current");
+    document.body.classList.remove("export-pdf", "export-ppt", "export-current", "export-portrait", "export-landscape");
     if (originalDocumentTitle !== undefined) {
       document.title = originalDocumentTitle;
       originalDocumentTitle = undefined;
     }
   }
 
-  function exportPreview({ mode, scope }) {
+  function exportPreview({ mode, scope, layout = "landscape" }) {
     window.clearTimeout(exportCleanupTimer);
     clearExportState();
     document.body.classList.add(mode === "ppt" ? "export-ppt" : "export-pdf");
     document.body.classList.toggle("export-ppt", mode === "ppt");
     document.body.classList.toggle("export-current", mode === "ppt" && scope === "current");
+    document.body.classList.toggle("export-portrait", mode === "ppt" && layout === "portrait");
+    document.body.classList.toggle("export-landscape", mode === "ppt" && layout !== "portrait");
     const date = new Date();
     const dateStamp = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
     originalDocumentTitle = document.title;

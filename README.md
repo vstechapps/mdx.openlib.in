@@ -26,10 +26,13 @@ The optional theme is `classic`, `executive`, `warm`, `dark`, `ocean`,
 also works without a theme parameter, returning only the rendered content.
 `MDX.exportPreview({ mode: "pdf", scope: "all" })` prints an MDX preview using
 the browser's print dialog.
+For `"ppt"` exports, pass `layout: "landscape"` or `layout: "portrait"`;
+the app defaults to landscape.
 
 The app also provides an MD2IMG mode that downloads the current slide or all
-slides as PNG images rendered from the preview's HTML styles. Choose portrait
-or landscape layout; each image is cropped to its slide content height.
+slides as PNG images rendered from the preview's HTML styles. MD2PPT and MD2IMG
+share a layout selector (landscape by default); image exports use 1920 × 1080
+for landscape and 1080 × 1920 for portrait mobile viewing.
 Downloaded images use
 `mdx-image-YYYYMMDD-NN.png` names; PDF and PPT print exports use
 `mdx-pdf-YYYYMMDD` and `mdx-ppt-YYYYMMDD` as their suggested filenames.

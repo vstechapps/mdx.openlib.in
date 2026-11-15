@@ -2,8 +2,8 @@
   const ENRICH_ENDPOINT = "https://api.openlib.in/content/enrich";
   const DRAFT_STORAGE_KEY = "mdx.markdownDraft.v1";
   const IMAGE_LAYOUTS = {
-    portrait: { width: 1080 },
-    landscape: { width: 1920 },
+    portrait: { width: 1080, height: 1920 },
+    landscape: { width: 1920, height: 1080 },
   };
   const SAMPLE = `# Ideas to impact
 
@@ -50,18 +50,15 @@ Strong documents help a team move from discussion to clear ownership.
     themeSelect: document.getElementById("theme-select"),
     fontSelect: document.getElementById("font-select"),
     exportBtn: document.getElementById("export-btn"),
-    enrichBtn: document.getElementById("enrich-btn"),
-    enrichDialog: document.getElementById("enrich-dialog"),
     enrichForm: document.getElementById("enrich-form"),
     enrichPrompt: document.getElementById("enrich-prompt"),
     enrichSubmit: document.getElementById("enrich-submit"),
     enrichSubmitLabel: document.querySelector(".enrich-submit-label"),
-    enrichTitle: document.getElementById("enrich-title"),
-    enrichPromptLabel: document.querySelector(".prompt-label"),
     enrichNote: document.getElementById("enrich-note"),
-    enrichCancel: document.getElementById("enrich-cancel"),
-    enrichClose: document.getElementById("enrich-close"),
     enrichError: document.getElementById("enrich-error"),
+    enrichReview: document.getElementById("enrich-review"),
+    enrichKeep: document.getElementById("enrich-keep"),
+    enrichRevert: document.getElementById("enrich-revert"),
     imageDownloadDialog: document.getElementById("image-download-dialog"),
     imageDownloadClose: document.getElementById("image-download-close"),
     imageDownloadList: document.getElementById("image-download-list"),
@@ -92,6 +89,7 @@ Strong documents help a team move from discussion to clear ownership.
     presenting: false,
     folderHint: "",
     enriching: false,
+    previousMarkdown: null,
   };
   let imageDownloadUrls = [];
 
@@ -109,7 +107,8 @@ Strong documents help a team move from discussion to clear ownership.
   }
 
   function applyTheme() {
-    els.previewFrame.className = `preview-frame theme-${state.theme}`;
+    const layoutClass = state.mode === "pdf" ? "" : ` layout-${els.imageLayout.value}`;
+    els.previewFrame.className = `preview-frame theme-${state.theme}${layoutClass}`;
     document.getElementById("preview-stage").className = `preview-stage theme-${state.theme}`;
     const pptClass = state.mode !== "pdf" ? " ppt-mode" : "";
     els.preview.className = `preview-body md-${state.theme} font-${state.font}${pptClass}`;
@@ -158,7 +157,7 @@ Strong documents help a team move from discussion to clear ownership.
     els.pptControls.classList.toggle("is-hidden", !presentation);
     els.presentBtn.classList.toggle("is-hidden", state.mode !== "ppt");
     els.exportScopeWrap.classList.toggle("is-hidden", !presentation);
-    els.imageLayoutWrap.classList.toggle("is-hidden", state.mode !== "img");
+    els.imageLayoutWrap.classList.toggle("is-hidden", state.mode === "pdf");
     els.exportScopeLabel.textContent = state.mode === "img" ? "Image range" : "Deck range";
     els.prevSlide.classList.toggle("is-hidden", !presentation);
     els.nextSlide.classList.toggle("is-hidden", !presentation);
@@ -221,17 +220,15 @@ Strong documents help a team move from discussion to clear ownership.
     const frame = document.createElement("div");
     frame.id = "image-export-frame";
     frame.className = els.previewFrame.className;
-    frame.style.cssText = `position:fixed;left:0;top:0;width:${layout.width}px;min-height:0;opacity:0;pointer-events:none;`;
+    frame.style.cssText = `position:fixed;left:0;top:0;width:${layout.width}px;height:${layout.height}px;min-height:0;box-sizing:border-box;border:0;padding:0;overflow:hidden;opacity:0;pointer-events:none;`;
     const preview = document.createElement("div");
     preview.id = "preview";
     preview.className = els.preview.className;
-    preview.style.cssText = "height:auto;min-height:0;display:block;";
+    preview.style.cssText = "height:100%;min-height:0;display:block;";
     const slideClone = slide.cloneNode(true);
     slideClone.classList.add("is-active");
     slideClone.style.display = "block";
-    slideClone.style.width = "100%";
-    slideClone.style.minHeight = "0";
-    slideClone.style.padding = "40px";
+    slideClone.style.cssText = "display:flex;width:100%;height:100%;min-height:0;box-sizing:border-box;flex-direction:column;justify-content:space-evenly;padding:40px;";
     preview.appendChild(slideClone);
     frame.appendChild(preview);
     document.body.appendChild(frame);
@@ -246,17 +243,14 @@ Strong documents help a team move from discussion to clear ownership.
         });
       }));
 
-      const captureHeight = Math.ceil(slideClone.scrollHeight);
-      frame.style.height = `${captureHeight}px`;
-
       const canvas = await window.html2canvas(frame, {
         backgroundColor: window.getComputedStyle(frame).backgroundColor,
-        height: captureHeight,
+        height: layout.height,
         logging: false,
         scale: 1,
         useCORS: true,
         width: layout.width,
-        windowHeight: captureHeight,
+        windowHeight: layout.height,
         windowWidth: layout.width,
         onclone: (clonedDocument) => {
           clonedDocument.getElementById("image-export-frame").style.opacity = "1";
@@ -301,28 +295,6 @@ Strong documents help a team move from discussion to clear ownership.
     }
   }
 
-  function openEnrichDialog() {
-    const hasContent = Boolean(els.mdInput.value.trim());
-    els.enrichError.hidden = true;
-    els.enrichError.textContent = "";
-    els.enrichPrompt.value = "";
-    els.enrichTitle.textContent = hasContent ? "Improve your Markdown" : "Create Markdown with AI";
-    els.enrichPromptLabel.textContent = hasContent ? "What would you like to change?" : "What would you like to create?";
-    els.enrichPrompt.placeholder = hasContent
-      ? "For example: Make this more concise and add a short summary at the top."
-      : "For example: Draft a concise project proposal with goals, milestones, and risks.";
-    els.enrichNote.textContent = hasContent
-      ? "Your current Markdown will be sent with this instruction and replaced only after a successful response."
-      : "Your instruction will be used to create Markdown from scratch.";
-    els.enrichSubmitLabel.textContent = hasContent ? "Improve Markdown" : "Create Markdown";
-    els.enrichDialog.showModal();
-    els.enrichPrompt.focus();
-  }
-
-  function closeEnrichDialog() {
-    if (!state.enriching) els.enrichDialog.close();
-  }
-
   async function enrichMarkdown(event) {
     event.preventDefault();
     const prompt = els.enrichPrompt.value.trim();
@@ -331,12 +303,17 @@ Strong documents help a team move from discussion to clear ownership.
 
     state.enriching = true;
     els.enrichSubmit.disabled = true;
-    els.enrichCancel.disabled = true;
-    els.enrichClose.disabled = true;
     els.enrichPrompt.disabled = true;
+    els.mdInput.disabled = true;
+    els.uploadFile.disabled = true;
+    els.uploadFolder.disabled = true;
     els.enrichSubmitLabel.textContent = "Working…";
     els.enrichError.hidden = true;
+    els.enrichReview.querySelectorAll("button").forEach((button) => {
+      button.disabled = true;
+    });
     setStatus(content.trim() ? "Improving Markdown…" : "Creating Markdown…");
+    els.enrichNote.textContent = "Working on your prompt…";
 
     try {
       const response = await fetch(ENRICH_ENDPOINT, {
@@ -358,24 +335,62 @@ Strong documents help a team move from discussion to clear ownership.
         throw new Error("The enrichment service returned no Markdown content");
       }
 
+      if (state.previousMarkdown === null) state.previousMarkdown = content;
       els.mdInput.value = enriched;
-      saveDraft();
       state.slideIndex = 0;
       render();
-      setStatus(content.trim() ? "AI improvement complete" : "AI draft created");
-      els.enrichDialog.close();
+      els.enrichReview.classList.remove("is-hidden");
+      els.enrichReview.querySelectorAll("button").forEach((button) => {
+        button.disabled = false;
+      });
+      els.enrichNote.textContent = "Updated Markdown is ready. Keep it or undo to restore the previous version.";
+      setStatus("AI update ready to review");
     } catch (error) {
       els.enrichError.textContent = error instanceof Error ? error.message : "Could not enrich this Markdown";
       els.enrichError.hidden = false;
+      els.enrichNote.textContent = state.previousMarkdown === null
+        ? "The Markdown was not changed. Edit your prompt and try again."
+        : "This request did not change the current draft. The previous AI update is still ready to keep or undo.";
       setStatus("AI enrichment failed");
     } finally {
       state.enriching = false;
       els.enrichSubmit.disabled = false;
-      els.enrichCancel.disabled = false;
-      els.enrichClose.disabled = false;
       els.enrichPrompt.disabled = false;
-      els.enrichSubmitLabel.textContent = content.trim() ? "Improve Markdown" : "Create Markdown";
+      els.mdInput.disabled = false;
+      els.uploadFile.disabled = false;
+      els.uploadFolder.disabled = false;
+      els.enrichReview.querySelectorAll("button").forEach((button) => {
+        button.disabled = state.previousMarkdown === null;
+      });
+      els.enrichSubmitLabel.textContent = "Run prompt";
     }
+  }
+
+  function keepAiChanges() {
+    if (state.previousMarkdown === null) return;
+    state.previousMarkdown = null;
+    els.enrichReview.classList.add("is-hidden");
+    saveDraft();
+    setStatus("AI changes kept");
+    els.enrichNote.textContent = "Changes saved. Enter another prompt to continue editing.";
+  }
+
+  function undoAiChanges() {
+    if (state.previousMarkdown === null) return;
+    els.mdInput.value = state.previousMarkdown;
+    state.previousMarkdown = null;
+    els.enrichReview.classList.add("is-hidden");
+    state.slideIndex = 0;
+    render();
+    saveDraft();
+    setStatus("Previous Markdown restored");
+    els.enrichNote.textContent = "Previous Markdown restored. Enter another prompt to try a different edit.";
+  }
+
+  function clearAiReview() {
+    state.previousMarkdown = null;
+    els.enrichReview.classList.add("is-hidden");
+    els.enrichNote.textContent = "Describe an edit or ask AI to create Markdown. The result appears in the editor below.";
   }
 
   els.uploadFile.addEventListener("click", async () => {
@@ -384,6 +399,7 @@ Strong documents help a team move from discussion to clear ownership.
       setStatus("Choose a markdown file first");
       return;
     }
+    clearAiReview();
     els.mdInput.value = await readTextFile(file);
     saveDraft();
     setStatus(file.name);
@@ -408,6 +424,7 @@ Strong documents help a team move from discussion to clear ownership.
         mdCandidates.find((file) => file.name === currentName) ||
         mdCandidates.find((file) => /readme/i.test(file.name)) ||
         mdCandidates[0];
+      clearAiReview();
       els.mdInput.value = await readTextFile(preferred);
       saveDraft();
       setStatus(`${preferred.name} · ${mapped.imageCount} images`);
@@ -422,17 +439,13 @@ Strong documents help a team move from discussion to clear ownership.
 
   els.mdInput.addEventListener("input", () => {
     state.slideIndex = Math.min(state.slideIndex, Math.max(0, window.MDX.splitSlides(els.mdInput.value).length - 1));
-    saveDraft();
+    if (state.previousMarkdown === null) saveDraft();
     render();
   });
 
-  els.enrichBtn.addEventListener("click", openEnrichDialog);
   els.enrichForm.addEventListener("submit", enrichMarkdown);
-  els.enrichCancel.addEventListener("click", closeEnrichDialog);
-  els.enrichClose.addEventListener("click", closeEnrichDialog);
-  els.enrichDialog.addEventListener("cancel", (event) => {
-    if (state.enriching) event.preventDefault();
-  });
+  els.enrichKeep.addEventListener("click", keepAiChanges);
+  els.enrichRevert.addEventListener("click", undoAiChanges);
   els.imageDownloadClose.addEventListener("click", () => els.imageDownloadDialog.close());
   els.imageDownloadDialog.addEventListener("close", clearImageDownloads);
 
@@ -447,7 +460,7 @@ Strong documents help a team move from discussion to clear ownership.
   });
 
   els.imageLayout.addEventListener("change", () => {
-    if (state.mode === "img") setStatus(`Image layout: ${els.imageLayout.value}`);
+    render();
   });
 
   els.tabs.forEach((tab) => {
@@ -482,6 +495,7 @@ Strong documents help a team move from discussion to clear ownership.
     window.MDX.exportPreview({
       mode: state.mode,
       scope: state.mode === "ppt" ? els.exportScope.value : "all",
+      layout: els.imageLayout.value,
     });
   });
 

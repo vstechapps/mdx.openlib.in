@@ -322,28 +322,6 @@ body {
   min-width: 0;
 }
 
-.btn-enrich {
-  min-height: 2.15rem;
-  padding: 0.35rem 0.7rem;
-  font-size: 0.74rem;
-  white-space: nowrap;
-}
-
-.btn-enrich svg { width: 1rem; height: 1rem; }
-
-.enrich-dialog {
-  width: min( min(92vw, 510px), calc(100vw - 2rem));
-  padding: 0;
-  border: 1px solid #465565;
-  border-radius: 10px;
-  background: #171f28;
-  color: var(--ink);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-}
-
-.enrich-dialog::backdrop { background: rgba(5, 9, 13, 0.72); backdrop-filter: blur(3px); }
-.enrich-dialog form { padding: 1.35rem; }
-
 .dialog-head {
   display: flex;
   justify-content: space-between;
@@ -380,26 +358,19 @@ body {
 .icon-btn:hover { border-color: #8293a5; background: #334251; }
 .icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.prompt-label {
-  display: block;
-  margin-bottom: 0.45rem;
-  color: #b8c3cd;
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
 #enrich-prompt {
-  display: block;
-  width: 100%;
-  min-height: 7rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 3.1rem;
+  max-height: 8rem;
   resize: vertical;
-  padding: 0.75rem 0.85rem;
+  padding: 0.65rem 0.75rem;
   border: 1px solid var(--line);
   border-radius: 6px;
   outline: none;
   background: #10161d;
   color: var(--ink);
-  font: 0.82rem/1.6 var(--font);
+  font: 0.78rem/1.5 var(--font);
 }
 
 #enrich-prompt:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(242, 166, 90, 0.11); }
@@ -423,8 +394,54 @@ body {
   line-height: 1.45;
 }
 
-.dialog-actions { display: flex; justify-content: flex-end; gap: 0.55rem; margin-top: 1.15rem; }
-.dialog-actions button:disabled { cursor: wait; opacity: 0.7; transform: none; }
+.ai-assist {
+  flex: 0 0 auto;
+  margin-bottom: 0.65rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: linear-gradient(135deg, rgba(242, 166, 90, 0.07), rgba(18, 24, 32, 0.72));
+}
+
+.ai-assist-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.55rem;
+}
+
+.ai-assist-head .dialog-eyebrow { margin-bottom: 0.1rem; }
+.ai-assist-head h3 { margin: 0; color: #e4eaf0; font: 600 0.85rem var(--display-font); }
+
+.ai-assist-hint {
+  max-width: 58%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.ai-prompt-form { display: flex; align-items: stretch; gap: 0.5rem; }
+.ai-run-btn { flex: 0 0 auto; align-self: stretch; min-height: 3.1rem; }
+
+.ai-review {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(45, 55, 67, 0.8);
+  color: #c5d0d9;
+  font-size: 0.72rem;
+}
+
+.ai-review-actions { display: flex; flex: 0 0 auto; gap: 0.45rem; }
+.ai-review button:disabled { cursor: wait; opacity: 0.6; transform: none; }
+.ai-assist-error { margin-top: 0.55rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .image-download-dialog {
   width: min(92vw, 510px);
@@ -456,8 +473,12 @@ body {
 @media (max-width: 560px) {
   .editor-head-actions { gap: 0.35rem; }
   .editor-head-actions .status { max-width: 38%; font-size: 0.68rem; }
-  .btn-enrich { padding-inline: 0.5rem; }
-  .enrich-dialog form { padding: 1rem; }
+  .ai-assist { padding: 0.6rem; }
+  .ai-assist-head { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+  .ai-assist-hint { max-width: none; text-align: left; }
+  .ai-prompt-form { flex-direction: column; }
+  .ai-run-btn { align-self: flex-end; min-height: 2.35rem; }
+  .ai-review { align-items: flex-start; flex-direction: column; }
 }
 
 #md-input {
@@ -481,6 +502,8 @@ body {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(242,166,90,0.11), var(--shadow);
 }
+
+#md-input:disabled { cursor: wait; opacity: 0.82; }
 
 .preview-stage {
   position: relative;
@@ -600,10 +623,23 @@ select:focus, button:focus-visible, input:focus-visible { outline: 2px solid var
   width: 100%;
   min-height: 18rem;
   padding: 0.35rem 0.2rem 1rem;
+  background: var(--theme-surface);
 }
 
 .slide.is-active {
   display: block;
+}
+
+.preview-frame.layout-landscape:has(#preview.ppt-mode) .slide {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+
+.preview-frame.layout-portrait:has(#preview.ppt-mode) .slide {
+  width: min(100%, 22rem);
+  aspect-ratio: 9 / 16;
+  min-height: 0;
+  margin-inline: auto;
 }
 
 .ppt-controls {
