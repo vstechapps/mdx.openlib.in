@@ -295,6 +295,11 @@ body {
   overflow: hidden;
 }
 
+.pane-editor {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
 .pane-head {
   display: flex;
   align-items: center;
@@ -471,13 +476,15 @@ body {
 .md-editor-wrap {
   position: relative;
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
+  width: 100%;
   min-height: 0;
   margin-bottom: 0.65rem;
 }
 
 #md-input {
-  flex: 1;
+  display: block;
+  flex: 1 1 auto;
   width: 100%;
   min-height: 0;
   overflow: auto;
@@ -674,13 +681,54 @@ body.is-presenting .preview-stage {
 }
 
 @media (max-width: 760px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   .navbar { align-items: center; flex-direction: row; padding: 0.7rem 1rem; }
   .brand-caption { display: none; }
   .mode-tab { min-width: auto; padding-inline: 0.65rem; }
   .toolbar { padding: 0.8rem 1rem; }
   .toolbar-file { width: 100%; }
   .toolbar-export { margin-left: 0; }
-  .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); padding: 0.9rem 1rem 1rem; }
+  .workspace {
+    width: 100%;
+    flex: 0 0 auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    padding: 0.9rem 1rem 1rem;
+    overflow: visible;
+  }
+
+  .pane-editor {
+    min-height: 27rem;
+    grid-template-rows: auto minmax(14rem, 1fr) auto;
+  }
+
+  .pane-preview { min-height: 25rem; }
+
+  .preview-stage {
+    min-height: 22rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .preview-frame {
+    grid-column: 1;
+    width: 100%;
+    padding: 0.85rem;
+  }
+
+  .preview-frame:has(#preview.ppt-mode) { padding-inline: 0.85rem; }
+
+  .nav-arrow { width: 2.5rem; height: 2.5rem; }
+  .nav-arrow-left { left: 0.4rem; }
+  .nav-arrow-right { right: 0.4rem; }
 }
 
 body.is-presenting .preview-stage {
@@ -738,19 +786,49 @@ body.is-presenting .slide.is-active {
 }
 
 @media (max-width: 900px) {
-  .workspace {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  body {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
+  .workspace {
+    width: 100%;
+    flex: 0 0 auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 520px) {
-  .navbar { align-items: flex-start; flex-direction: column; gap: 0.65rem; }
-  .navbar-actions { width: 100%; gap: 0.45rem; }
-  .navbar-actions .mode-tabs { width: auto; flex: 1; }
-  .mode-tab { flex: 1; }
+  .navbar { align-items: stretch; flex-direction: column; gap: 0.65rem; padding: 0.65rem 0.8rem; }
+  .navbar-actions { width: 100%; flex-direction: column; align-items: stretch; gap: 0.3rem; }
+  .guide-link { align-self: flex-start; }
+  .navbar-actions .mode-tabs { width: 100%; }
+  .mode-tab { flex: 1 1 0; gap: 0.35rem; padding-inline: 0.35rem; font-size: 0.7rem; }
+  .mode-tab svg { width: 0.95rem; height: 0.95rem; }
+  .toolbar { gap: 0.75rem; padding: 0.75rem 0.8rem; }
+  .toolbar-file input { width: 100%; max-width: 100%; }
   .toolbar-actions { width: 100%; }
   .action-row { flex-wrap: wrap; }
+  .toolbar-actions .action-row .btn { flex: 1 1 auto; }
+  .toolbar-theme, .toolbar-font { flex: 1 1 calc(50% - 0.5rem); min-width: 0; }
+  .toolbar-theme select, .toolbar-font select { width: 100%; }
   .toolbar-export { width: 100%; justify-content: flex-end; }
+  .workspace { padding-inline: 0.8rem; }
+  .pane-head { gap: 0.4rem; }
+  .editor-head-actions { max-width: 58%; }
+  .editor-head-actions .status { max-width: 100%; }
+  .ai-prompt-form { flex-direction: row; align-items: stretch; }
+  #enrich-prompt { min-height: 3.1rem; }
+  .ai-run-btn { align-self: stretch; min-height: 3.1rem; }
+}
+
+@media (max-width: 380px) {
+  .ai-prompt-form { flex-direction: column; }
+  .ai-run-btn { align-self: flex-end; min-height: 2.35rem; }
+  .action-row .btn { padding-inline: 0.55rem; font-size: 0.75rem; }
 }
