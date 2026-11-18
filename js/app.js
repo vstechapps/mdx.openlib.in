@@ -240,7 +240,7 @@ Strong documents help a team move from discussion to clear ownership.
     const layout = IMAGE_LAYOUTS[els.imageLayout.value] || IMAGE_LAYOUTS.portrait;
     const frame = document.createElement("div");
     frame.id = "image-export-frame";
-    frame.className = els.previewFrame.className;
+    frame.className = `${els.previewFrame.className} image-export-frame`;
     frame.style.cssText = `position:fixed;left:0;top:0;width:${layout.width}px;height:${layout.height}px;min-height:0;box-sizing:border-box;border:0;padding:0;overflow:hidden;opacity:0;pointer-events:none;`;
     const preview = document.createElement("div");
     preview.id = "preview";
@@ -248,8 +248,7 @@ Strong documents help a team move from discussion to clear ownership.
     preview.style.cssText = "height:100%;min-height:0;display:block;";
     const slideClone = slide.cloneNode(true);
     slideClone.classList.add("is-active");
-    slideClone.style.display = "block";
-    slideClone.style.cssText = "display:flex;width:100%;height:100%;min-height:0;box-sizing:border-box;flex-direction:column;justify-content:space-evenly;padding:40px;";
+    slideClone.style.cssText = "display:block;width:100%;height:100%;min-height:0;box-sizing:border-box;";
     preview.appendChild(slideClone);
     frame.appendChild(preview);
     document.body.appendChild(frame);
