@@ -29,11 +29,12 @@ the browser's print dialog.
 For `"ppt"` exports, pass `layout: "landscape"` or `layout: "portrait"`;
 the app defaults to landscape.
 
-The app also provides an MD2IMG mode that downloads the current slide or all
-slides as PNG images rendered from the preview's HTML styles. MD2PPT and MD2IMG
-share a layout selector (landscape by default); image exports use 1920 × 1080
-for landscape and 1080 × 1920 for portrait mobile viewing.
-Downloaded images use
+The app also provides an MD2IMG mode that previews the current slide or all
+slides as PNG images rendered from the preview's HTML styles. Navigate the
+image preview with the left/right arrow keys or on-screen controls, and use the
+download button to save the displayed image. MD2PPT and MD2IMG share a layout
+selector (landscape by default); image exports use 1920 × 1080 for landscape
+and 1080 × 1920 for portrait mobile viewing. Downloaded images use
 `mdx-image-YYYYMMDD-NN.png` names; PDF and PPT print exports use
 `mdx-pdf-YYYYMMDD` and `mdx-ppt-YYYYMMDD` as their suggested filenames.
 Markdown drafts are automatically saved in the current browser's local storage

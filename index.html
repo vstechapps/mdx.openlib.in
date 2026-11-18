@@ -180,12 +180,27 @@
       <div class="dialog-head">
         <div>
           <p class="dialog-eyebrow">INSTAGRAM-READY PNG</p>
-          <h2 id="image-download-title">Download your images</h2>
+          <h2 id="image-download-title">Preview your images</h2>
         </div>
         <button type="button" id="image-download-close" class="icon-btn" aria-label="Close dialog" title="Close">&times;</button>
       </div>
-      <p class="dialog-note">Images use 1920 × 1080 in landscape and 1080 × 1920 in portrait. Select each image below to download it.</p>
-      <div id="image-download-list" class="image-download-list"></div>
+      <p class="dialog-note">Images use 1920 × 1080 in landscape and 1080 × 1920 in portrait. Use the arrows to preview each image.</p>
+      <div class="image-preview">
+        <button type="button" id="image-download-prev" class="image-nav image-nav-prev" aria-label="Previous image" title="Previous image">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <img id="image-download-preview" alt="" />
+        <button type="button" id="image-download-next" class="image-nav image-nav-next" aria-label="Next image" title="Next image">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="image-download-controls">
+        <span id="image-download-position" aria-live="polite"></span>
+        <a id="image-download-current" class="btn btn-accent" href="#" download>
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M10 2.75v9m0 0 3.25-3.25M10 11.75 6.75 8.5M3.5 12.5v3.75h13V12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Download image</span>
+        </a>
+      </div>
     </dialog>
 
     <script src="js/mdx.min.js"></script>

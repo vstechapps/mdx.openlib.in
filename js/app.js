@@ -61,7 +61,11 @@ Strong documents help a team move from discussion to clear ownership.
     enrichRevert: document.getElementById("enrich-revert"),
     imageDownloadDialog: document.getElementById("image-download-dialog"),
     imageDownloadClose: document.getElementById("image-download-close"),
-    imageDownloadList: document.getElementById("image-download-list"),
+    imageDownloadPrev: document.getElementById("image-download-prev"),
+    imageDownloadNext: document.getElementById("image-download-next"),
+    imageDownloadPreview: document.getElementById("image-download-preview"),
+    imageDownloadPosition: document.getElementById("image-download-position"),
+    imageDownloadCurrent: document.getElementById("image-download-current"),
     exportScopeWrap: document.getElementById("export-scope-wrap"),
     exportScopeLabel: document.getElementById("export-scope-label"),
     exportScope: document.getElementById("export-scope"),
@@ -91,7 +95,8 @@ Strong documents help a team move from discussion to clear ownership.
     enriching: false,
     previousMarkdown: null,
   };
-  let imageDownloadUrls = [];
+  let imageDownloads = [];
+  let imageDownloadIndex = 0;
 
   if (window.marked) {
     window.marked.setOptions({ gfm: true });
@@ -193,24 +198,40 @@ Strong documents help a team move from discussion to clear ownership.
   }
 
   function clearImageDownloads() {
-    imageDownloadUrls.forEach((url) => URL.revokeObjectURL(url));
-    imageDownloadUrls = [];
-    els.imageDownloadList.replaceChildren();
+    imageDownloads.forEach(({ url }) => URL.revokeObjectURL(url));
+    imageDownloads = [];
+    imageDownloadIndex = 0;
+    els.imageDownloadPreview.removeAttribute("src");
+    els.imageDownloadCurrent.removeAttribute("href");
+    els.imageDownloadPosition.textContent = "";
+  }
+
+  function showImageDownload(index) {
+    imageDownloadIndex = Math.max(0, Math.min(index, imageDownloads.length - 1));
+    const image = imageDownloads[imageDownloadIndex];
+    if (!image) return;
+
+    els.imageDownloadPreview.src = image.url;
+    els.imageDownloadPreview.alt = `Preview of image ${imageDownloadIndex + 1}`;
+    els.imageDownloadCurrent.href = image.url;
+    els.imageDownloadCurrent.download = image.filename;
+    els.imageDownloadPosition.textContent = `${imageDownloadIndex + 1} of ${imageDownloads.length} · ${image.filename}`;
+    els.imageDownloadPrev.disabled = imageDownloadIndex === 0;
+    els.imageDownloadNext.disabled = imageDownloadIndex === imageDownloads.length - 1;
   }
 
   function showImageDownloads(images) {
     clearImageDownloads();
-    images.forEach(({ blob, filename }) => {
-      const url = URL.createObjectURL(blob);
-      imageDownloadUrls.push(url);
-      const link = document.createElement("a");
-      link.className = "btn btn-accent";
-      link.href = url;
-      link.download = filename;
-      link.textContent = filename;
-      els.imageDownloadList.appendChild(link);
-    });
-    els.imageDownloadDialog.showModal();
+    imageDownloads = images.map(({ blob, filename }) => ({
+      filename,
+      url: URL.createObjectURL(blob),
+    }));
+    if (imageDownloads.length) {
+      showImageDownload(0);
+      els.imageDownloadDialog.showModal();
+    } else {
+      setStatus("There are no images to preview");
+    }
   }
 
   async function slideImageBlob(slide) {
@@ -451,6 +472,8 @@ Strong documents help a team move from discussion to clear ownership.
   els.enrichKeep.addEventListener("click", keepAiChanges);
   els.enrichRevert.addEventListener("click", undoAiChanges);
   els.imageDownloadClose.addEventListener("click", () => els.imageDownloadDialog.close());
+  els.imageDownloadPrev.addEventListener("click", () => showImageDownload(imageDownloadIndex - 1));
+  els.imageDownloadNext.addEventListener("click", () => showImageDownload(imageDownloadIndex + 1));
   els.imageDownloadDialog.addEventListener("close", clearImageDownloads);
 
   els.themeSelect.addEventListener("change", () => {
@@ -481,6 +504,16 @@ Strong documents help a team move from discussion to clear ownership.
   });
 
   document.addEventListener("keydown", (event) => {
+    if (els.imageDownloadDialog.open) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showImageDownload(imageDownloadIndex - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showImageDownload(imageDownloadIndex + 1);
+      }
+      return;
+    }
     if (state.mode === "pdf") return;
     if (event.key === "Escape" && state.presenting) {
       setPresenting(false);
